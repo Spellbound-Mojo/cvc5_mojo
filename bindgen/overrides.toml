@@ -1,0 +1,272 @@
+# bindgen/overrides.toml: the only hand-maintained input to the generator.
+#
+# Everything else is extracted from the pinned cvc5 release. Keep this file
+# small. `python -m bindgen.snapshot --check` fails if an entry names a
+# Python method or C function that no longer exists (stale), and the report
+# lists entries the automatic join would have resolved anyway (redundant).
+
+[policy]
+# Deprecated Python methods (for example the Solver.mk* duplicates of
+# TermManager.mk*) are not mirrored.
+skip_deprecated = true
+# The automatic join (statuses auto + overloaded) must resolve at least this
+# fraction of the non-deprecated, non-dunder Python methods. A drop means
+# cvc5 changed how its wrappers are written and the extractors need work.
+min_auto_fraction = 0.75
+
+[runtime]
+version_method = "Solver.getVersion"
+
+[null_compatibility]
+# Probe every public, zero-argument query on these default-constructed objects.
+# Results are measured in the pinned Python environment, never specified here.
+classes = ["Result", "SynthResult", "Proof"]
+
+# Emission must account for the complete surface, including unsupported callbacks.
+# A new omission or an entry that becomes implementable fails generation.
+[generation.unbound_c]
+
+[generation.missing_methods]
+
+# Only these Python None flags may use the default extracted from the C++
+# declaration. Other flags need their own policy (mkString is manual).
+[none_bool_defaults]
+"TermManager.mkDatatypeDecl" = "mkDatatypeDecl"
+
+# Python class -> C API section (from the header section markers) and the
+# C function name prefix used by the generic rules below.
+[classes]
+TermManager = { section = "Cvc5TermManager", prefix = "cvc5_" }
+Solver = { section = "Cvc5", prefix = "cvc5_" }
+Term = { section = "Cvc5Term", prefix = "cvc5_term_" }
+Sort = { section = "Cvc5Sort", prefix = "cvc5_sort_" }
+Op = { section = "Cvc5Op", prefix = "cvc5_op_" }
+Result = { section = "Cvc5Result", prefix = "cvc5_result_" }
+SynthResult = { section = "Cvc5SynthResult", prefix = "cvc5_synth_result_" }
+Datatype = { section = "Cvc5Datatype", prefix = "cvc5_dt_" }
+DatatypeConstructor = { section = "Cvc5DatatypeConstructor", prefix = "cvc5_dt_cons_" }
+DatatypeConstructorDecl = { section = "Cvc5DatatypeConstructorDecl", prefix = "cvc5_dt_cons_decl_" }
+DatatypeDecl = { section = "Cvc5DatatypeDecl", prefix = "cvc5_dt_decl_" }
+DatatypeSelector = { section = "Cvc5DatatypeSelector", prefix = "cvc5_dt_sel_" }
+Grammar = { section = "Cvc5Grammar", prefix = "cvc5_grammar_" }
+Proof = { section = "Cvc5Proof", prefix = "cvc5_proof_" }
+Statistics = { section = "Cvc5Statistics", prefix = "cvc5_stats_" }
+SymbolManager = { section = "Cvc5SymbolManager", prefix = "cvc5_sm_" }
+InputParser = { section = "Cvc5InputParser", prefix = "cvc5_parser_" }
+Command = { section = "Cvc5Command", prefix = "cvc5_cmd_" }
+Plugin = { section = "Cvc5Plugin", prefix = "cvc5_plugin_", callback = true }
+
+# Generic rules, tried after the automatic join. `c` lists candidate C
+# functions ({prefix} is the class prefix); the first one that exists wins.
+# `fallback` applies when none exists.
+[[rules]]
+methods = ["__eq__"]
+c = ["{prefix}is_equal"]
+
+[[rules]]
+methods = ["__ne__"]
+c = ["{prefix}is_disequal", "{prefix}is_equal"]
+
+[[rules]]
+methods = ["__lt__", "__gt__", "__le__", "__ge__"]
+c = ["{prefix}compare"]
+
+[[rules]]
+methods = ["__hash__"]
+c = ["{prefix}hash"]
+
+[[rules]]
+methods = ["__str__", "__repr__"]
+c = ["{prefix}to_string"]
+
+[[rules]]
+methods = ["isNull"]
+c = ["{prefix}is_null"]
+# The C API represents a null object as a NULL handle.
+fallback = "null-handle"
+
+# Per-method entries. Exactly one of:
+#   c = [...]       bind to these C functions (generated)
+#   manual = [...]  hand-written Mojo using these C functions, in
+#                   bindgen/manual/<Class>.mojo (gen_api checks the list)
+#   alias = "Class.method"
+#   skip = "reason"
+# plus an optional `note`. With c = ["cvc5_mk_term"], `kind` names the Kind
+# of a term built from the receiver and the method's Term arguments.
+
+# Accessors: Python returns a stored reference, the C API has a getter.
+[methods."Sort.__ne__"]
+c = ["cvc5_sort_is_equal"]
+note = "Negate equality: cvc5 1.4.1's C inequality implementation prints debugging output."
+
+[methods."Solver.getTermManager"]
+c = ["cvc5_get_tm"]
+
+[methods."InputParser.getSolver"]
+c = ["cvc5_parser_get_solver"]
+
+[methods."InputParser.getSymbolManager"]
+c = ["cvc5_parser_get_sm"]
+
+# Term convenience constructors. Python calls the C++ Term methods, which
+# build the node of this kind from the term and the arguments, then
+# type-check it (Term::notTerm and so on in src/api/cpp/cvc5.cpp). The C API
+# has none; the generator builds the same term with cvc5_mk_term, using the
+# term manager that every wrapper remembers, as Python's Term does.
+[methods."Term.notTerm"]
+c = ["cvc5_mk_term"]
+kind = "NOT"
+
+[methods."Term.andTerm"]
+c = ["cvc5_mk_term"]
+kind = "AND"
+
+[methods."Term.orTerm"]
+c = ["cvc5_mk_term"]
+kind = "OR"
+
+[methods."Term.xorTerm"]
+c = ["cvc5_mk_term"]
+kind = "XOR"
+
+[methods."Term.eqTerm"]
+c = ["cvc5_mk_term"]
+kind = "EQUAL"
+
+[methods."Term.impTerm"]
+c = ["cvc5_mk_term"]
+kind = "IMPLIES"
+
+[methods."Term.iteTerm"]
+c = ["cvc5_mk_term"]
+kind = "ITE"
+
+# Containers: indexing (by index, or by name where C has both) and
+# iteration (`__iter__`: a count function and a get-by-index function).
+[methods."Term.__getitem__"]
+c = ["cvc5_term_get_child"]
+
+[methods."Term.__iter__"]
+c = ["cvc5_term_get_num_children", "cvc5_term_get_child"]
+
+[methods."Op.__getitem__"]
+c = ["cvc5_op_get_index"]
+
+[methods."Datatype.__getitem__"]
+c = ["cvc5_dt_get_constructor", "cvc5_dt_get_constructor_by_name"]
+
+[methods."Datatype.__iter__"]
+c = ["cvc5_dt_get_num_constructors", "cvc5_dt_get_constructor"]
+
+[methods."DatatypeConstructor.__getitem__"]
+c = ["cvc5_dt_cons_get_selector", "cvc5_dt_cons_get_selector_by_name"]
+
+[methods."DatatypeConstructor.__iter__"]
+c = ["cvc5_dt_cons_get_num_selectors", "cvc5_dt_cons_get_selector"]
+
+# Statistics: Python returns each statistic as a dict; Mojo returns a `Stat`
+# (bindgen/manual/Statistics.mojo). Each reads the statistic with the
+# cvc5_stat_* functions and releases it.
+[methods."Statistics.get"]
+manual = [
+  "cvc5_stats_iter_init", "cvc5_stats_iter_has_next", "cvc5_stats_iter_next",
+  "cvc5_stat_is_default", "cvc5_stat_is_internal", "cvc5_stat_is_int", "cvc5_stat_get_int",
+  "cvc5_stat_is_double", "cvc5_stat_get_double", "cvc5_stat_is_string", "cvc5_stat_get_string",
+  "cvc5_stat_is_histogram", "cvc5_stat_get_histogram", "cvc5_stat_release",
+]
+
+[methods."Statistics.__getitem__"]
+manual = [
+  "cvc5_stats_get",
+  "cvc5_stat_is_default", "cvc5_stat_is_internal", "cvc5_stat_is_int", "cvc5_stat_get_int",
+  "cvc5_stat_is_double", "cvc5_stat_get_double", "cvc5_stat_is_string", "cvc5_stat_get_string",
+  "cvc5_stat_is_histogram", "cvc5_stat_get_histogram", "cvc5_stat_release",
+]
+
+[methods."Statistics.__iter__"]
+manual = [
+  "cvc5_stats_iter_init", "cvc5_stats_iter_has_next", "cvc5_stats_iter_next",
+  "cvc5_stat_is_default", "cvc5_stat_is_internal", "cvc5_stat_is_int", "cvc5_stat_get_int",
+  "cvc5_stat_is_double", "cvc5_stat_get_double", "cvc5_stat_is_string", "cvc5_stat_get_string",
+  "cvc5_stat_is_histogram", "cvc5_stat_get_histogram", "cvc5_stat_release",
+]
+
+# Big numbers: Mojo converts an integer literal that does not fit an `Int`
+# without a diagnostic, so the int64 and uint64 overloads a literal would
+# select give way to exact `Integer` overloads (bindgen/manual/TermManager.mojo).
+[methods."TermManager.mkReal"]
+c = ["cvc5_mk_real", "cvc5_mk_real_int64", "cvc5_mk_real_num_den"]
+private = { cvc5_mk_real_num_den = "_native_mkReal64" }
+note = "Exact Integer/Rational overloads use a private generated int64-pair helper when representable, with a decimal fallback."
+
+[methods."TermManager.mkBitVector"]
+c = ["cvc5_mk_bv", "cvc5_mk_bv_uint64"]
+private = { cvc5_mk_bv_uint64 = "_native_mkBitVector64" }
+note = "The exact Integer overload uses a private generated uint64 helper for fitting nonnegative values, with a decimal fallback."
+
+[methods."Term.getIntegerValue"]
+manual = ["cvc5_term_is_int64_value", "cvc5_term_get_int64_value", "cvc5_term_is_uint64_value", "cvc5_term_get_uint64_value", "cvc5_term_get_integer_value"]
+note = "Use exact native integer getters when representable; retain decimal parsing for arbitrary precision."
+
+[methods."Term.getRealValue"]
+manual = ["cvc5_term_is_real64_value", "cvc5_term_get_real64_value", "cvc5_term_get_real_value"]
+note = "Use the native signed numerator/unsigned denominator getter when representable, with an exact decimal fallback."
+
+# Python returns an option's information as a dict; Mojo returns an
+# `OptionInfo` (bindgen/manual/Solver.mojo).
+[methods."Solver.getOptionInfo"]
+manual = ["cvc5_get_option_info"]
+
+# Python-only conversions.
+[methods."TermManager.mkString"]
+manual = ["cvc5_mk_string"]
+note = "Python's omitted flag accepts Unicode code points; encode them as SMT-LIB escapes to preserve NUL through the C API. Explicit Boolean flags retain cvc5's escaped-string behavior."
+
+[methods."Term.getStringValue"]
+manual = ["cvc5_term_get_u32string_value", "cvc5_term_to_string"]
+note = "The C UTF-32 getter has no length. Validate with it, then decode the lossless SMT-LIB representation to preserve embedded NUL."
+
+[methods."Term.toPythonObj"]
+skip = "Converts to Python objects; Mojo has typed getters (getIntegerValue, getRealValue, ...)."
+
+# Plugins are callbacks from cvc5 into user code.
+[methods."Solver.addPlugin"]
+manual = ["cvc5_add_plugin"]
+
+[methods."Plugin.check"]
+manual = []
+
+[methods."Plugin.notifySatClause"]
+manual = []
+
+[methods."Plugin.notifyTheoryLemma"]
+manual = []
+
+[methods."Plugin.getName"]
+manual = []
+
+# Explicit additions to the Mojo API for functions absent from Python.
+# The native declaration and documentation still come from the C snapshot.
+[extensions."Solver.declareOracleFun"]
+manual = ["cvc5_declare_oracle_fun"]
+
+# cvc5's Python unit tests that bindgen.translate translates but that cannot
+# pass in Mojo, keyed "<file>.<test>", with reason, phase, and diagnostic.
+# `pixi run --locked cvc5-tests` builds each on its own and fails once one
+# passes or fails differently. bindgen.translate reports an entry for a test that no
+# longer exists, or that it does not translate anyway, as stale in
+# tests/cvc5/translation.json, and `cvc5-tests` fails on that too.
+[tests]
+"test_symbol_manager.test_constructor" = { reason = "the deprecated `SymbolManager(Solver)` is not mirrored", phase = "compile", match = "cannot be converted from 'Solver' to 'TermManager'" }
+
+# cvc5's Python examples that bindgen.translate translates but whose output
+# cannot match what Python prints under the official bindings, keyed by the
+# example's name, with the reason. `pixi run --locked cvc5-tests` still builds and
+# runs them, and fails once one matches.
+[examples]
+
+# Non-unique models differ between the wheel and release binary. The translator
+# checks every assertion and printed model term; the runner compares the remaining
+# output exactly, including all solver results. Patterns come from the source AST.
+[example_checks]
+floating_point = "model"

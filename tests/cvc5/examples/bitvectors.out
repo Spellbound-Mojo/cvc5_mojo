@@ -1,0 +1,19 @@
+Asserting (= new_x (ite (= x a) b a)) to cvc5
+Pushing a new context.
+Asserting (= new_x_ (bvxor a b x)) to cvc5
+Checking sat assuming: (not (= new_x new_x_))
+Expect UNSAT.
+cvc5: unsat
+Popping context.
+Asserting (= new_x_ (bvsub (bvadd a b) x)) to cvc5
+Checking sat assuming: (not (= new_x new_x_))
+Expect UNSAT.
+cvc5: unsat
+Check sat assuming:  (not (and (= new_x new_x_) (not (= x x))))
+Expect SAT.
+cvc5: sat
+Sort of ((_ extract 0 0) a) is (_ BitVec 1)
+Assert (= ((_ extract 0 0) a) #b1)
+Check satisifiability
+Expect sat
+cvc5: sat

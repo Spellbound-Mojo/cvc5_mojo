@@ -1,0 +1,34 @@
+name: Linux ARM64
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  targeted:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: prefix-dev/setup-pixi@d3f436a425481402e6a95a1d1fc10331c708cd9e # v0.10.2
+        with:
+          pixi-version: v0.81.0
+          locked: true
+      - name: Verify the native architecture and regenerate
+        run: |
+          test "$(uname -m)" = aarch64
+          pixi run --locked generate
+          test -z "$(git status --porcelain -- api/ src/ tests/cvc5/)"
+      - name: Native package and platform regressions
+        run: pixi run --locked python -m unittest tests.bindgen.test_platforms tests.bindgen.test_packaging tests.bindgen.test_bump -v
+      - name: Quickstart from source and precompiled module
+        run: pixi run --locked docs-test --only quickstart.mojo --output build/arm-quickstart
+      - name: Callback and null-object contracts
+        run: pixi run --locked contracts --only plugins,oracles,null_printing --optimization 3 --output build/arm-contracts --jobs 2
+      - name: Stage the native ARM libraries
+        run: pixi run --locked python -m bindgen.package_native --release third_party/cvc5 --prefix build/arm-prefix

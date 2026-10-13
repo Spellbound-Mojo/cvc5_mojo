@@ -1,0 +1,9 @@
+Result     = sat
+people     = (set.union (set.singleton (tuple (as @Person_0 Person))) (set.union (set.singleton (tuple (as @Person_2 Person))) (set.singleton (tuple (as @Person_1 Person)))))
+males      = (set.union (set.singleton (tuple (as @Person_2 Person))) (set.singleton (tuple (as @Person_1 Person))))
+females    = (set.singleton (tuple (as @Person_0 Person)))
+father     = (set.singleton (tuple (as @Person_2 Person) (as @Person_1 Person)))
+mother     = (set.singleton (tuple (as @Person_0 Person) (as @Person_2 Person)))
+parent     = (set.union (set.singleton (tuple (as @Person_0 Person) (as @Person_2 Person))) (set.singleton (tuple (as @Person_2 Person) (as @Person_1 Person))))
+descendant = (set.union (set.singleton (tuple (as @Person_1 Person) (as @Person_0 Person))) (set.union (set.singleton (tuple (as @Person_2 Person) (as @Person_0 Person))) (set.singleton (tuple (as @Person_1 Person) (as @Person_2 Person)))))
+ancestor   = (set.union (set.singleton (tuple (as @Person_0 Person) (as @Person_1 Person))) (set.union (set.singleton (tuple (as @Person_0 Person) (as @Person_2 Person))) (set.singleton (tuple (as @Person_2 Person) (as @Person_1 Person)))))

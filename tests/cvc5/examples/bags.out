@@ -1,0 +1,10 @@
+cvc5 reports: (not (= (bag.inter_min (bag.union_disjoint A B) C) (bag.union_disjoint (bag.inter_min A C) (bag.inter_min B C)))) is sat
+A: (bag "" 2)
+B: (bag "" 2)
+C: (bag "" 3)
+(bag.inter_min (bag.union_disjoint A B) C): (bag "" 3)
+(bag.union_disjoint (bag.inter_min A C) (bag.inter_min B C)): (bag "" 4)
+cvc5 reports: (not (= (bag.inter_min (bag.union_max A B) C) (bag.union_max (bag.inter_min A C) (bag.inter_min B C)))) is unsat.
+cvc5 reports: (not (bag.subbag (as bag.empty (Bag String)) A)) is unsat.
+cvc5 reports: (= 4 (bag.count x (bag.union_disjoint (bag.union_disjoint (bag "a" 2) (bag "b" 3)) (bag.union_disjoint (bag "b" 1) (bag "c" 2))))) is sat.
+x: "b" 

@@ -1,0 +1,625 @@
+{
+ "cvc5": "1.4.1",
+ "source": "test/unit/api/python",
+ "stale": [],
+ "files": {
+  "test_command.py": {
+   "run": [
+    "test_invoke",
+    "test_to_string",
+    "test_get_command_name"
+   ],
+   "left_out": {},
+   "not_translated": {}
+  },
+  "test_datatype_api.py": {
+   "run": [
+    "test_mk_datatype_sort",
+    "test_is_null",
+    "test_mk_datatype_sorts",
+    "test_mk_datatype_sorts_sel_unres",
+    "test_datatype_structs",
+    "test_datatype_names",
+    "test_parametric_datatype",
+    "test_is_finite",
+    "test_datatype_simply_rec",
+    "test_datatype_specialized_cons"
+   ],
+   "left_out": {},
+   "not_translated": {}
+  },
+  "test_finite_field.py": {
+   "run": [
+    "test_finite_field_base_equality"
+   ],
+   "left_out": {},
+   "not_translated": {
+    "test_basic_finite_field": "`toPythonObj` is not mirrored: Converts to Python objects; Mojo has typed getters (getIntegerValue, getRealValue, ...).",
+    "test_basic_finite_field_base": "`toPythonObj` is not mirrored: Converts to Python objects; Mojo has typed getters (getIntegerValue, getRealValue, ...)."
+   }
+  },
+  "test_grammar.py": {
+   "run": [
+    "test_is_null",
+    "test_to_string",
+    "test_add_rule",
+    "test_add_rules",
+    "test_add_any_constant",
+    "test_add_any_variable"
+   ],
+   "left_out": {},
+   "not_translated": {}
+  },
+  "test_input_parser.py": {
+   "run": [
+    "test_get_solver",
+    "test_symbol_manager",
+    "test_set_file_input",
+    "test_set_and_append_incremental_string_input",
+    "test_set_and_append_incremental_string_input_interleave",
+    "test_append_incremental_no_set",
+    "test_set_string_input",
+    "test_next_command_no_input",
+    "test_next_term",
+    "test_next_term2",
+    "test_multiple_parsers",
+    "test_get_declared_terms_and_sorts"
+   ],
+   "left_out": {},
+   "not_translated": {}
+  },
+  "test_lifetime.py": {
+   "run": [
+    "test_sort_outlives_term_manager",
+    "test_term_outlives_term_manager",
+    "test_op_outlives_term_manager",
+    "test_term_iterator_outlives_term_manager",
+    "test_datatype_outlives_term_manager",
+    "test_solver_outlives_term_manager",
+    "test_value_outlives_solver_and_term_manager",
+    "test_grammar_outlives_solver_and_term_manager",
+    "test_proof_outlives_solver_and_term_manager"
+   ],
+   "left_out": {},
+   "not_translated": {}
+  },
+  "test_op.py": {
+   "run": [
+    "test_hash",
+    "test_get_kind",
+    "test_is_null",
+    "test_op_from_kind",
+    "test_get_num_indices",
+    "test_subscript_operator",
+    "test_op_scoping_to_string"
+   ],
+   "left_out": {},
+   "not_translated": {}
+  },
+  "test_parser_lifetime.py": {
+   "run": [
+    "test_symbol_manager_outlives_term_manager",
+    "test_declared_symbols_outlive_parser_and_managers",
+    "test_parsed_term_outlives_parser_and_managers",
+    "test_parsed_term_outlives_parser_with_internal_symbol_manager"
+   ],
+   "left_out": {},
+   "not_translated": {}
+  },
+  "test_proof.py": {
+   "run": [
+    "test_null_proof",
+    "test_get_rule",
+    "test_get_rewrite_rule",
+    "test_get_result",
+    "test_get_children",
+    "test_get_arguments",
+    "test_eq"
+   ],
+   "left_out": {},
+   "not_translated": {}
+  },
+  "test_result.py": {
+   "run": [
+    "test_is_null",
+    "test_eq",
+    "test_is_sat",
+    "test_is_unsat",
+    "test_is_sat_unknown"
+   ],
+   "left_out": {},
+   "not_translated": {}
+  },
+  "test_solver.py": {
+   "run": [
+    "test_recoverable_exception",
+    "test_declare_fun_fresh",
+    "test_declare_fun",
+    "test_declare_sort",
+    "test_declare_sort_fresh",
+    "test_define_fun",
+    "test_define_fun_global",
+    "test_define_fun_rec",
+    "test_define_fun_rec_wrong_logic",
+    "test_define_fun_rec_global",
+    "test_define_funs_rec",
+    "test_define_funs_rec_wrong_logic",
+    "test_define_funs_rec_global",
+    "test_get_assertions",
+    "test_get_info",
+    "test_get_option",
+    "test_get_option_info",
+    "test_get_unsat_assumptions1",
+    "test_get_unsat_assumptions2",
+    "test_get_unsat_assumptions3",
+    "test_get_unsat_core1",
+    "test_get_unsat_core2",
+    "test_get_unsat_core_and_proof",
+    "test_get_unsat_core_and_proof_to_string",
+    "test_proof_to_string_assertion_names",
+    "test_learned_literals",
+    "test_learned_literals2",
+    "test_get_timeout_core_unsat",
+    "test_get_timeout_core",
+    "test_get_timeout_core_assuming",
+    "test_get_timeout_core_assuming_empty",
+    "test_get_value1",
+    "test_get_value2",
+    "test_get_value3",
+    "test_declare_sep_heap",
+    "test_get_value_sep_heap_1",
+    "test_get_value_sep_heap_2",
+    "test_get_value_sep_heap_3",
+    "test_get_value_sep_heap_4",
+    "test_get_value_sep_heap_5",
+    "test_get_value_sep_nil_1",
+    "test_get_value_sep_nil_2",
+    "test_get_value_sep_nil_3",
+    "test_get_value_sep_nil_4",
+    "test_get_value_sep_nil_5",
+    "test_push1",
+    "test_push2",
+    "test_pop1",
+    "test_pop2",
+    "test_pop3",
+    "test_block_model1",
+    "test_block_model2",
+    "test_block_model3",
+    "test_block_model_values1",
+    "test_block_model_values2",
+    "test_block_model_values3",
+    "test_block_model_values4",
+    "test_block_model_values5",
+    "test_get_instantiations",
+    "test_get_statistics",
+    "test_set_info",
+    "test_simplify",
+    "test_simplify_apply_subs",
+    "test_assert_formula",
+    "test_check_sat",
+    "test_check_sat_assuming",
+    "test_check_sat_assuming1",
+    "test_check_sat_assuming2",
+    "test_set_logic",
+    "test_is_logic_set",
+    "test_get_logic",
+    "test_set_option",
+    "test_reset_assertions",
+    "test_declare_sygus_var",
+    "test_mk_sygus_grammar",
+    "test_add_sygus_constraint",
+    "test_get_sygus_constraints",
+    "test_add_sygus_assume",
+    "test_get_sygus_assumptions",
+    "test_add_sygus_inv_constraint",
+    "test_check_synth",
+    "test_get_synth_solution",
+    "test_check_synth_next",
+    "test_check_synth_next2",
+    "test_check_synth_next3",
+    "test_find_synth",
+    "test_find_synth2",
+    "test_get_abduct",
+    "test_get_abduct2",
+    "test_get_abduct_next",
+    "test_get_interpolant",
+    "test_get_interpolant_next",
+    "test_declare_pool",
+    "test_get_model_domain_elements",
+    "test_get_model_domain_elements2",
+    "test_get_synth_solutions",
+    "test_get_value_sep_heap1",
+    "test_get_value_sep_heap2",
+    "test_get_value_sep_heap3",
+    "test_get_value_sep_heap4",
+    "test_get_value_sep_heap5",
+    "test_get_value_sep_nil1",
+    "test_get_value_sep_nil2",
+    "test_get_value_sep_nil3",
+    "test_get_value_sep_nil4",
+    "test_get_value_sep_nil5",
+    "test_is_model_core_symbol",
+    "test_get_model3",
+    "test_issue5893",
+    "test_issue7000",
+    "test_mk_sygus_var",
+    "test_synth_fun",
+    "test_tuple_project",
+    "test_get_data_type_arity",
+    "test_get_unsat_core_lemmas1",
+    "test_get_unsat_core_lemmas2",
+    "test_get_difficulty",
+    "test_get_difficulty2",
+    "test_get_difficulty3",
+    "test_get_model",
+    "test_get_model2",
+    "test_get_model_3",
+    "test_get_option_names",
+    "test_get_quantifier_elimination",
+    "test_get_quantifier_elimination_disjunct",
+    "test_get_version",
+    "test_plugin_unsat",
+    "test_plugin_listen"
+   ],
+   "left_out": {},
+   "not_translated": {}
+  },
+  "test_sort.py": {
+   "run": [
+    "test_hash",
+    "test_operators_comparison",
+    "test_get_kind",
+    "test_has_get_symbol",
+    "test_is_null",
+    "test_is_boolean",
+    "test_is_integer",
+    "test_is_real",
+    "test_is_string",
+    "test_is_reg_exp",
+    "test_is_rounding_mode",
+    "test_is_bit_vector",
+    "test_is_floating_point",
+    "test_is_datatype",
+    "test_is_constructor",
+    "test_is_selector",
+    "test_is_tester",
+    "test_is_updater",
+    "test_is_function",
+    "test_is_predicate",
+    "test_is_tuple",
+    "test_is_nullable",
+    "test_is_record",
+    "test_is_array",
+    "test_is_set",
+    "test_is_bag",
+    "test_is_sequence",
+    "test_is_abstract",
+    "test_is_uninterpreted",
+    "test_is_sort_constructor",
+    "test_get_datatype",
+    "test_datatype_sorts",
+    "test_instantiate",
+    "test_is_instantiated",
+    "test_get_instantiated_parameters",
+    "test_get_uninterpreted_sort_constructor",
+    "test_get_function_arity",
+    "test_get_function_domain_sorts",
+    "test_get_function_codomain_sort",
+    "test_get_array_index_sort",
+    "test_get_array_element_sort",
+    "test_get_set_element_sort",
+    "test_get_bag_element_sort",
+    "test_get_sequence_element_sort",
+    "test_get_abstract_kind",
+    "test_get_uninterpreted_sort_name",
+    "test_get_uninterpreted_sort_constructor_name",
+    "test_get_uninterpreted_sort_constructor_arity",
+    "test_get_bv_size",
+    "test_get_fp_exponent_size",
+    "test_get_fp_significand_size",
+    "test_get_datatype_arity",
+    "test_get_tuple_length",
+    "test_get_tuple_sorts",
+    "test_get_nullable_element_sort",
+    "test_sort_compare",
+    "test_sort_scoped_tostring",
+    "test_sort_substitute"
+   ],
+   "left_out": {},
+   "not_translated": {}
+  },
+  "test_symbol_manager.py": {
+   "run": [
+    "test_is_logic_set",
+    "test_get_logic",
+    "test_get_declared_terms_and_sorts",
+    "test_get_named_terms"
+   ],
+   "left_out": {
+    "test_constructor": "the deprecated `SymbolManager(Solver)` is not mirrored"
+   },
+   "not_translated": {}
+  },
+  "test_synth_result.py": {
+   "run": [
+    "test_is_null",
+    "test_equal",
+    "test_has_solution",
+    "test_has_no_solution",
+    "test_has_is_unknown"
+   ],
+   "left_out": {},
+   "not_translated": {}
+  },
+  "test_term.py": {
+   "run": [
+    "test_eq",
+    "test_get_id",
+    "test_get_kind",
+    "test_get_sort",
+    "test_get_op",
+    "test_has_get_symbol",
+    "test_is_null",
+    "test_not_term",
+    "test_and_term",
+    "test_or_term",
+    "test_xor_term",
+    "test_eq_term",
+    "test_imp_term",
+    "test_ite_term",
+    "test_term_assignment",
+    "test_substitute",
+    "test_term_compare",
+    "test_term_children",
+    "test_get_const_array_base",
+    "test_get_uninterpreted_sort_value",
+    "test_is_rounding_mode_value",
+    "test_get_rounding_mode_value",
+    "test_get_tuple",
+    "test_get_set",
+    "test_get_sequence",
+    "test_get_floating_point",
+    "test_is_integer",
+    "test_get_string",
+    "test_get_real",
+    "test_get_boolean",
+    "test_get_bit_vector",
+    "test_const_array",
+    "test_const_sequence_elements",
+    "test_get_cardinality_constraint",
+    "test_get_real_algebraic_number",
+    "test_get_skolem",
+    "test_term_scoped_to_string"
+   ],
+   "left_out": {},
+   "not_translated": {}
+  },
+  "test_term_manager.py": {
+   "run": [
+    "test_get_boolean_sort",
+    "test_get_integer_sort",
+    "test_get_real_sort",
+    "test_get_reg_exp_sort",
+    "test_get_string_sort",
+    "test_get_rounding_mode_sort",
+    "test_mk_array_sort",
+    "test_mk_bit_vector_sort",
+    "test_mk_finite_field_sort",
+    "test_mk_floating_point_sort",
+    "test_mk_datatype_sort",
+    "test_mk_datatype_sorts",
+    "test_mk_function_sort",
+    "test_mk_param_sort",
+    "test_mk_skolem",
+    "test_skolem_num_indices",
+    "test_mk_predicate_sort",
+    "test_mk_record_sort",
+    "test_mk_set_sort",
+    "test_mk_bag_sort",
+    "test_mk_sequence_sort",
+    "test_mk_abstract_sort",
+    "test_mk_uninterpreted_sort",
+    "test_mk_unresolved_sort",
+    "test_mk_sort_constructor_sort",
+    "test_mk_tuple_sort",
+    "test_mk_nullable_sort",
+    "test_mk_bit_vector",
+    "test_mk_finite_field_elem",
+    "test_mk_var",
+    "test_mk_boolean",
+    "test_mk_rounding_mode",
+    "test_mk_floating_point",
+    "test_mk_cardinality_constraint",
+    "test_mk_empty_set",
+    "test_mk_empty_bag",
+    "test_mk_empty_sequence",
+    "test_mk_false",
+    "test_mk_floating_point_nan",
+    "test_mk_floating_point_neg_zero",
+    "test_mk_floating_point_neg_inf",
+    "test_mk_floating_point_pos_inf",
+    "test_mk_floating_point_pos_zero",
+    "test_mk_op",
+    "test_mk_pi",
+    "test_mk_integer",
+    "test_mk_real",
+    "test_mk_regexp_none",
+    "test_mk_regexp_all",
+    "test_mk_regexp_allchar",
+    "test_mk_sep_emp",
+    "test_mk_sep_nil",
+    "test_mk_string",
+    "test_mk_term",
+    "test_mk_term_from_op",
+    "test_mk_true",
+    "test_mk_tuple",
+    "test_mk_nullable_some",
+    "test_mk_nullable_val",
+    "test_mk_nullable_is_null",
+    "test_mk_nullable_is_some",
+    "test_mk_nullable_null",
+    "test_mk_nullable_lift",
+    "test_mk_universe_set",
+    "test_mk_const",
+    "test_declare_fun_fresh",
+    "test_mk_const_array",
+    "test_uf_iteration",
+    "test_get_statistics"
+   ],
+   "left_out": {},
+   "not_translated": {}
+  },
+  "test_to_python_obj.py": {
+   "run": [
+    "testGetSymbol"
+   ],
+   "left_out": {},
+   "not_translated": {
+    "testGetBool": "`toPythonObj` is not mirrored: Converts to Python objects; Mojo has typed getters (getIntegerValue, getRealValue, ...).",
+    "testGetInt": "`toPythonObj` is not mirrored: Converts to Python objects; Mojo has typed getters (getIntegerValue, getRealValue, ...).",
+    "testGetReal": "`toPythonObj` is not mirrored: Converts to Python objects; Mojo has typed getters (getIntegerValue, getRealValue, ...).",
+    "testGetBV": "`toPythonObj` is not mirrored: Converts to Python objects; Mojo has typed getters (getIntegerValue, getRealValue, ...).",
+    "testGetArray": "`toPythonObj` is not mirrored: Converts to Python objects; Mojo has typed getters (getIntegerValue, getRealValue, ...).",
+    "testGetString": "`toPythonObj` is not mirrored: Converts to Python objects; Mojo has typed getters (getIntegerValue, getRealValue, ...).",
+    "testGetValueInt": "`toPythonObj` is not mirrored: Converts to Python objects; Mojo has typed getters (getIntegerValue, getRealValue, ...).",
+    "testGetValueReal": "`toPythonObj` is not mirrored: Converts to Python objects; Mojo has typed getters (getIntegerValue, getRealValue, ...)."
+   }
+  }
+ },
+ "example_source": "examples/api/python",
+ "examples": {
+  "bags.py": {
+   "run": "bags"
+  },
+  "bitvectors.py": {
+   "run": "bitvectors"
+  },
+  "bitvectors_and_arrays.py": {
+   "run": "bitvectors_and_arrays"
+  },
+  "combination.py": {
+   "run": "combination"
+  },
+  "datatypes.py": {
+   "run": "datatypes"
+  },
+  "exceptions.py": {
+   "run": "exceptions"
+  },
+  "extract.py": {
+   "run": "extract"
+  },
+  "finite_field.py": {
+   "not_translated": "`toPythonObj` is not mirrored: Converts to Python objects; Mojo has typed getters (getIntegerValue, getRealValue, ...)."
+  },
+  "floating_point.py": {
+   "run": "floating_point",
+   "model_output": [
+    "Value\\ of\\ `a`:\\ (.+)",
+    "Value\\ of\\ `b`:\\ (.+)",
+    "Value\\ of\\ `c`:\\ (.+)",
+    "Value\\ of\\ `\\(fp\\.fma\\ RNE\\ a\\ b\\ c\\)`:\\ (.+)",
+    "Value\\ of\\ `\\(fp\\.add\\ RNE\\ \\(fp\\.mul\\ a\\ b\\)\\ c\\)`:\\ (.+)",
+    "Value\\ of\\ `a`:\\ (.+)",
+    "Value\\ of\\ `b`:\\ (.+)",
+    "Value\\ of\\ `c`:\\ (.+)",
+    "Value\\ of\\ `a`:\\ (.+)",
+    "Value\\ of\\ `b`:\\ (.+)",
+    "Value\\ of\\ `c`:\\ (.+)",
+    "Value\\ of\\ `d`:\\ (.+)",
+    "Value\\ of\\ `\\(\\(_\\ fp\\.to_ubv\\ 16\\)\\ RTP\\ d\\)`:\\ (.+)",
+    "Value\\ of\\ `\\(\\(_\\ fp\\.to_ubv\\ 16\\)\\ RTN\\ d\\)`:\\ (.+)",
+    "Value\\ of\\ `\\(fp\\.to_real\\ d\\)`:\\ (.+)"
+   ]
+  },
+  "helloworld.py": {
+   "run": "helloworld"
+  },
+  "id.py": {
+   "run": "id"
+  },
+  "linear_arith.py": {
+   "run": "linear_arith"
+  },
+  "parser.py": {
+   "run": "parser"
+  },
+  "parser_sym_manager.py": {
+   "run": "parser_sym_manager"
+  },
+  "quickstart.py": {
+   "run": "quickstart"
+  },
+  "relations.py": {
+   "run": "relations"
+  },
+  "sequences.py": {
+   "run": "sequences"
+  },
+  "sets.py": {
+   "run": "sets"
+  },
+  "strings.py": {
+   "run": "strings"
+  },
+  "sygus-fun.py": {
+   "run": "sygus_fun"
+  },
+  "sygus-inv.py": {
+   "run": "sygus_inv"
+  },
+  "transcendentals.py": {
+   "run": "transcendentals"
+  },
+  "uf.py": {
+   "run": "uf"
+  }
+ },
+ "compile_fail": {
+  "test_term_manager__test_mk_finite_field_sort__88": {
+   "line": 35,
+   "source": "test_term_manager.py:88",
+   "test": "test_mk_finite_field_sort"
+  },
+  "test_term_manager__test_mk_finite_field_elem__485": {
+   "line": 20,
+   "source": "test_term_manager.py:485",
+   "test": "test_mk_finite_field_elem"
+  },
+  "test_term_manager__test_mk_finite_field_elem__506": {
+   "line": 43,
+   "source": "test_term_manager.py:506",
+   "test": "test_mk_finite_field_elem"
+  },
+  "test_term_manager__test_mk_cardinality_constraint__599": {
+   "line": 16,
+   "source": "test_term_manager.py:599",
+   "test": "test_mk_cardinality_constraint"
+  },
+  "test_term_manager__test_mk_cardinality_constraint__601": {
+   "line": 24,
+   "source": "test_term_manager.py:601",
+   "test": "test_mk_cardinality_constraint"
+  },
+  "test_term_manager__test_mk_op__667": {
+   "line": 13,
+   "source": "test_term_manager.py:667",
+   "test": "test_mk_op"
+  },
+  "test_term_manager__test_mk_real__817": {
+   "line": 126,
+   "source": "test_term_manager.py:817",
+   "test": "test_mk_real"
+  },
+  "example_exceptions__35": {
+   "line": 21,
+   "source": "examples/api/python/exceptions.py:35",
+   "example": "exceptions"
+  },
+  "example_exceptions__45": {
+   "line": 22,
+   "source": "examples/api/python/exceptions.py:45",
+   "example": "exceptions"
+  }
+ }
+}

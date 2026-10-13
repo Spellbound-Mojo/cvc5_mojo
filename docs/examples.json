@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "examples": {
+    "docs/examples/booleans.mojo": {
+      "stdout": "configuration: sat\nstorage required: true\n"
+    },
+    "docs/examples/coloring.mojo": {
+      "stdout": "2 colors: unsat\n3 colors: sat\n"
+    },
+    "docs/examples/consumer/main.mojo": {
+      "stdout": "three workers: unsat\nfour workers: sat\n",
+      "working_directory": "isolated"
+    },
+    "docs/examples/damped_oscillation.mojo": {
+      "stdout": "direct query with budget 1: unknown\n[0, 1]: absolute signal <= 1 certified\n[1, 2] with budget 1: inconclusive\nwhole time window: not yet certified\n[1, 2]: absolute signal <= 1/2 certified\nwhole time window: absolute signal <= 1 certified\n"
+    },
+    "docs/examples/debugging.mojo": {
+      "stdout": "missing logarithm domain : sat\npositive logarithm domain : unsat\nvacuous property check : unsat\ncheck the assumptions alone : unsat\ncorrected assumptions : sat\nactual counterexample exists : sat\n90 treated as radians : unsat\n90 degrees converted to radians : sat\nrequire both coordinates to change : unsat\nrequire at least one coordinate to change : sat\n"
+    },
+    "docs/examples/encoding_budgets.mojo": {
+      "stdout": "relational budget 1 : unknown\nalgebraic budget 1 : unsat\nrelational budget 100000 : unsat\nalgebraic budget 100000 : unsat\n"
+    },
+    "docs/examples/enumeration.mojo": {
+      "stdout": "distinct pairs: 3\nall solutions found\n"
+    },
+    "docs/examples/errors.mojo": {
+      "stdout": "caught: cvc5: expecting an arithmetic subterm\nnext term: (+ x x)\n"
+    },
+    "docs/examples/exponentials.mojo": {
+      "stdout": "exp(x) <= 0: unsat\nx > 0 and exp(x) <= 1: unsat\n"
+    },
+    "docs/examples/hyperbolic.mojo": {
+      "stdout": "sinh(0) != 0 or cosh(0) != 1: unsat\n"
+    },
+    "docs/examples/incremental.mojo": {
+      "stdout": "candidate above 10: unsat\ncandidate 7: sat with x = 7\n"
+    },
+    "docs/examples/integers.mojo": {
+      "stdout": "tickets: sat\nadults: 4 children: 3\n"
+    },
+    "docs/examples/inverse_branches.mojo": {
+      "stdout": "sin(angle) = 0 with angle = pi: sat\nthe same angle in [-pi/2, pi/2]: unsat\n"
+    },
+    "docs/examples/lifetimes.mojo": {
+      "stdout": "false is unsat\n"
+    },
+    "docs/examples/logarithm_base.mojo": {
+      "stdout": "ln(1/2) >= 0: unsat\n"
+    },
+    "docs/examples/logarithms.mojo": {
+      "stdout": "ln(2) outside (0, 1): unsat\nln(1): 0.0\n"
+    },
+    "docs/examples/migration.mojo": {
+      "stdout": "x: (/ 1 2)\nshared solver with x < 0: unsat\nafter pop: sat\n",
+      "python": "docs/examples/migration.py"
+    },
+    "docs/examples/models.mojo": {
+      "stdout": "x > 0 and x < 2: sat with x = 1\nx > 0 and x < 0: unsat\n  core: (> x 0)\n  core: (< x 0)\n"
+    },
+    "docs/examples/oracles.mojo": {
+      "stdout": "increment(3) = 5: unsat\n"
+    },
+    "docs/examples/plugins.mojo": {
+      "stdout": "x < 0 with the nonnegative plugin: unsat\n"
+    },
+    "docs/examples/properties.mojo": {
+      "stdout": "positive input, nonpositive square: unsat\nnonnegative input, nonpositive square: sat at 0.0\n"
+    },
+    "docs/examples/quickstart.mojo": {
+      "stdout": "(< (* x x) 0) is unsat\n"
+    },
+    "docs/examples/reals.mojo": {
+      "stdout": "real solution: (/ 1 2)\ninteger equation: unsat\n"
+    },
+    "docs/examples/resource_limits.mojo": {
+      "stdout": "unknown: no conclusion within the resource budget\n"
+    },
+    "docs/examples/root_bracket.mojo": {
+      "stdout": "opposite endpoint signs certified: unsat\n"
+    },
+    "docs/examples/schedule_application.mojo": {
+      "stdout": "deadline 10: sat\nrush deadline: unsat\ncore labels recognized: True\nminimum integer deadline: 7\nadjacent smaller deadline: unsat\n"
+    },
+    "docs/examples/scheduling.mojo": {
+      "stdout": "deadline 4 : unsat\ndeadline 5 : sat\n"
+    },
+    "docs/examples/sine_bounds.mojo": {
+      "stdout": "sin(1/2) outside [23/48, 1841/3840]: unsat\n"
+    },
+    "docs/examples/sine_phase.mojo": {
+      "stdout": "pi < angle < 2*pi and y*y < sin(angle): unsat\n"
+    },
+    "docs/examples/tangent_domain.mojo": {
+      "stdout": "tan(0) != 0 on its domain: unsat\npi/2 satisfies the tangent domain: unsat\n"
+    },
+    "docs/examples/terms.mojo": {
+      "stdout": "expression: (+ x x)\nsort: Int\nconstraint: (= (+ x x) 6)\n"
+    },
+    "docs/examples/transcendental_terms.mojo": {
+      "stdout": "exponential: (exp x)\nsine: (sin x)\ncosine: (cos x)\ntangent: (tan x)\ninverse sine: (arcsin x)\npi: real.pi\nexact half: (/ (to_real 1) (to_real 2))\n"
+    },
+    "docs/examples/trigonometry.mojo": {
+      "stdout": "sin(x) outside [-1, 1]: unsat\ncos(x) outside [-1, 1]: unsat\n"
+    },
+    "docs/examples/uniqueness.mojo": {
+      "stdout": "another (x, y) pair: unsat\noriginal problem remains satisfiable\n"
+    },
+    "docs/examples/unsat_core.mojo": {
+      "stdout": "requirements: unsat\ncore contains both conflicting bounds\n"
+    }
+  }
+}

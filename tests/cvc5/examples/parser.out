@@ -1,0 +1,17 @@
+Executing command (set-logic QF_LIA):
+success
+Executing command (declare-fun a () Int):
+success
+Executing command (declare-fun b () Int):
+success
+Executing command (declare-fun c () Int):
+success
+Executing command (assert (> a (+ b c))):
+success
+Executing command (assert (< a b)):
+success
+Executing command (assert (> c 0)):
+success
+Finished parsing commands
+expected: unsat
+result: unsat

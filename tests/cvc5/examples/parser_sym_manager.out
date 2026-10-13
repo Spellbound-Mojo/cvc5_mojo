@@ -1,0 +1,11 @@
+Executing command (set-logic QF_LIA)
+Executing command (declare-fun a () Int)
+Executing command (declare-fun b () Int)
+Executing command (declare-fun c () Bool)
+Finished parsing commands
+Parsed term: (+ a b)
+Parsed term: (- a 10)
+Parsed term: (>= 0 45)
+Parsed term: (and c c)
+Parsed term: true
+Finished parsing terms

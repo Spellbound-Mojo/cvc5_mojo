@@ -1,0 +1,46 @@
+name: extended binding verification
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 4 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: binding-extended-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  extended:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: prefix-dev/setup-pixi@d3f436a425481402e6a95a1d1fc10331c708cd9e # v0.10.2
+        with:
+          pixi-version: v0.81.0
+          cache: true
+          locked: true
+      - name: Prepare pinned dependencies
+        run: pixi run --locked fetch
+      # The verification runner itself never fetches or refreshes dependencies.
+      # Timings run last, without concurrent tests in this job. Hosted runner
+      # variation still prevents treating these artifacts as a hard speed gate.
+      - name: Extended cached-dependency checks
+        run: pixi run --locked verify-binding --tier extended --output .cache/binding-extended --jobs 2
+      - name: Preserve reports, reproducers and timing baseline
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: binding-extended-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            .cache/binding-extended/**/*.json
+            .cache/binding-extended/**/*.calls
+            .cache/binding-extended/**/*.tsv
+            .cache/binding-extended/**/*.maps
+            .cache/binding-extended/**/sequence-inputs/*
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30

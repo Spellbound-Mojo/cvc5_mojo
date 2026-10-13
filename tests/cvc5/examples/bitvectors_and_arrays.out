@@ -1,0 +1,6 @@
+Asserting (let ((_let_1 (select current_array #b00))) (let ((_let_2 (bvmul #b00000000000000000000000000000010 _let_1))) (let ((_let_3 (store current_array #b01 _let_2))) (let ((_let_4 (select _let_3 #b01))) (let ((_let_5 (bvmul #b00000000000000000000000000000010 _let_4))) (let ((_let_6 (select (store _let_3 #b10 _let_5) #b10))) (not (and (bvslt _let_1 _let_2) (bvslt _let_4 _let_5) (bvslt _let_6 (bvmul #b00000000000000000000000000000010 _let_6)))))))))) to cvc5
+Expect sat.
+cvc5: sat
+The satisfying model is: 
+ current_array = (store (store (store ((as const (Array (_ BitVec 2) (_ BitVec 32))) #b01000000000000000000000000000001) #b01 #b10000000000000000000000000000010) #b10 #b00000000000000000000000000000100) #b11 #b00000000000000000000000000001000)
+ current_array[0] #b01000000000000000000000000000001

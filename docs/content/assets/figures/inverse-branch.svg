@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="210" viewBox="0 0 760 210" role="img" aria-labelledby="title desc">
+<title id="title">Selecting the principal inverse sine branch</title>
+<desc id="desc">A number line from negative pi to pi. The closed interval negative pi over two to pi over two is shaded. The sine roots negative pi and pi are outside the interval; zero is inside.</desc>
+<rect width="760" height="210" fill="#fff" rx="6"/>
+<g font-family="system-ui,sans-serif" font-size="19" text-anchor="middle" fill="#182b3a">
+<rect x="225" y="75" width="310" height="50" fill="#d9ecff"/>
+<path d="M55 100H705" stroke="#182b3a" stroke-width="2"/>
+<path d="M225 72V128M535 72V128" stroke="#225ea8" stroke-width="4"/>
+<g fill="#fff" stroke="#8e4356" stroke-width="3"><circle cx="70" cy="100" r="8"/><circle cx="690" cy="100" r="8"/></g>
+<circle cx="380" cy="100" r="8" fill="#225ea8"/>
+<text x="380" y="36">Principal output interval of asin</text>
+<text x="70" y="156">−π</text><text x="225" y="156">−π/2</text><text x="380" y="156">0</text><text x="535" y="156">π/2</text><text x="690" y="156">π</text>
+<text x="380" y="192" font-size="16">Only the root at zero lies inside the shaded interval.</text>
+</g></svg>

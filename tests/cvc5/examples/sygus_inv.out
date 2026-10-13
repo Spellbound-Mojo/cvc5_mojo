@@ -1,0 +1,3 @@
+(
+  (define-fun inv-f ((x Int)) Bool (not (>= x 11)))
+)

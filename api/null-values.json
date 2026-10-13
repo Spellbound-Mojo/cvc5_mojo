@@ -1,0 +1,105 @@
+{
+ "cvc5": "1.4.1",
+ "classes": {
+  "Command": {
+   "text": "null"
+  },
+  "Datatype": {
+   "error": "RuntimeError"
+  },
+  "DatatypeConstructor": {
+   "error": "signal 11"
+  },
+  "DatatypeConstructorDecl": {
+   "error": "RuntimeError"
+  },
+  "DatatypeDecl": {
+   "error": "RuntimeError"
+  },
+  "DatatypeSelector": {
+   "error": "RuntimeError"
+  },
+  "Op": {
+   "text": "NULL_TERM"
+  },
+  "Grammar": {
+   "text": ""
+  },
+  "Result": {
+   "text": "none"
+  },
+  "SynthResult": {
+   "text": "(NONE)"
+  },
+  "Sort": {
+   "text": "null"
+  },
+  "Term": {
+   "text": "null"
+  }
+ },
+ "queries": {
+  "Result": {
+   "isNull": {
+    "kind": "bool",
+    "value": true
+   },
+   "isSat": {
+    "kind": "bool",
+    "value": false
+   },
+   "isUnsat": {
+    "kind": "bool",
+    "value": false
+   },
+   "isUnknown": {
+    "kind": "bool",
+    "value": false
+   },
+   "getUnknownExplanation": {
+    "kind": "enum",
+    "type": "UnknownExplanation",
+    "name": "UNKNOWN_REASON"
+   }
+  },
+  "SynthResult": {
+   "isNull": {
+    "kind": "bool",
+    "value": true
+   },
+   "hasSolution": {
+    "kind": "bool",
+    "value": false
+   },
+   "hasNoSolution": {
+    "kind": "bool",
+    "value": false
+   },
+   "isUnknown": {
+    "kind": "bool",
+    "value": false
+   }
+  },
+  "Proof": {
+   "getRule": {
+    "kind": "enum",
+    "type": "ProofRule",
+    "name": "UNKNOWN"
+   },
+   "getRewriteRule": {
+    "kind": "unsafe",
+    "signal": 11
+   },
+   "getResult": {
+    "kind": "null",
+    "type": "Term"
+   },
+   "getChildren": {
+    "kind": "empty-list"
+   },
+   "getArguments": {
+    "kind": "empty-list"
+   }
+  }
+ }
+}

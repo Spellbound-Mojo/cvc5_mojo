@@ -1,0 +1,148 @@
+site_name: cvc5 Mojo
+site_description: Learn constraint solving in Mojo with tutorials, transcendental functions, tested examples, API reference and architecture.
+site_url: https://spellbound-mojo.github.io/cvc5_mojo/
+repo_url: https://github.com/Spellbound-Mojo/cvc5_mojo
+docs_dir: docs/content
+site_dir: .cache/docs-site
+use_directory_urls: true
+strict: true
+theme:
+  name: null
+  custom_dir: docs/theme
+  static_templates: [404.html]
+plugins:
+  - search:
+      lang: en
+      min_search_length: 2
+hooks:
+  - docs/hooks.py
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - def_list
+  - fenced_code
+  - tables
+  - toc:
+      permalink: true
+  - codehilite:
+      guess_lang: false
+not_in_nav: |
+  /search.md
+validation:
+  nav:
+    omitted_files: warn
+    not_found: warn
+  links:
+    not_found: warn
+    anchors: warn
+    unrecognized_links: warn
+watch:
+  - src/cvc5_mojo
+  - bindgen
+  - api/cvc5-api.json
+  - docs/examples
+  - docs/examples.json
+  - tests/cvc5
+nav:
+  - Welcome: index.md
+  - Get started:
+      - Installation: start/installation.md
+      - Ownership and errors: start/ownership.md
+      - Release notes: releases.md
+  - Tutorials:
+      - Learning path: tutorials/index.md
+      - 1. Your first query: tutorials/first-query.md
+      - 2. Sorts and terms: tutorials/terms.md
+      - 3. Boolean constraints: tutorials/booleans.md
+      - 4. Integer constraints: tutorials/integers.md
+      - 5. Real arithmetic: tutorials/reals.md
+      - 6. Results and models: tutorials/models.md
+      - 7. Checking properties: tutorials/properties.md
+      - 8. Incremental solving: tutorials/incremental.md
+      - 9. Conflicting requirements: tutorials/unsat-cores.md
+      - 10. Enumerating solutions: tutorials/enumeration.md
+      - 11. Graph coloring: tutorials/coloring.md
+      - 12. Scheduling: tutorials/scheduling.md
+      - Plugin callbacks: reference/plugin.md
+      - Oracle functions: reference/oracles.md
+  - Transcendental functions:
+      - Learning path: tutorials/transcendentals/index.md
+      - 1. Expressions and constants: tutorials/transcendentals/expressions.md
+      - 2. Exponentials and logarithms: tutorials/transcendentals/exponential-logarithms.md
+      - 3. Trigonometric constraints: tutorials/transcendentals/trigonometry.md
+      - 4. Inverse and derived functions: tutorials/transcendentals/inverse-derived.md
+      - 5. Proving bounds: tutorials/transcendentals/bounds.md
+      - 6. Results and solver limits: tutorials/transcendentals/results.md
+      - 7. Practical cases: tutorials/transcendentals/practical-cases.md
+      - 8. Damped oscillation application: tutorials/transcendentals/application.md
+  - Scheduling application:
+      - 1. Shared model: tutorials/scheduling-app/model.md
+      - 2. Diagnose a conflict: tutorials/scheduling-app/conflicts.md
+      - 3. Certify an optimum: tutorials/scheduling-app/optimization.md
+  - Examples:
+      - Example gallery: examples/index.md
+      - "Tutorial: cvc5's examples": examples/tutorial.md
+  - Architecture:
+      - Overview: architecture/overview.md
+  - API reference:
+      - How to read the reference: reference/index.md
+      - TermManager: reference/term-manager.md
+      - Solver: reference/solver.md
+      - Term and Op: reference/terms.md
+      - Sort: reference/sorts.md
+      - Results: reference/results.md
+      - Datatypes: reference/datatypes.md
+      - Grammars and proofs: reference/proofs.md
+      - Statistics: reference/statistics.md
+      - Parser: reference/parser.md
+      - Plugin: reference/plugin.md
+      - Enums: reference/enums.md
+      - Coverage report: reference/coverage.md
+      - Solver options: reference/options.md
+  - Guides:
+      - Task cookbook: guides/cookbook.md
+      - Glossary and mathematical index: guides/glossary.md
+      - Organizing solver code: guides/modeling.md
+      - Debugging a model: guides/debugging-models.md
+      - Configuring a solver: guides/solver-options.md
+      - Python to Mojo: guides/python-migration.md
+      - Using another project: guides/consumer-project.md
+      - Support and limitations: guides/status.md
+      - Troubleshooting: guides/troubleshooting.md
+  - Contributing:
+      - Development: contributing/development.md
+      - Working on the generator: contributing/generator.md
+      - Roadmap: contributing/roadmap.md
+      - Maintaining the docs: contributing/documentation.md
+      - Internals:
+          - Design principles: architecture/principles.md
+          - Inputs and extraction: architecture/inputs.md
+          - Mapping Python to C: architecture/join.md
+          - Generated layers: architecture/layers.md
+          - Runtime: architecture/runtime.md
+          - The cvc5 C API: architecture/c-api.md
+          - Verification: architecture/verification.md
+      - Validation reports:
+          - Matched binding controls: architecture/binding-controls.md
+          - Ownership audit: architecture/ownership-audit.md
+          - Datatype, statistics, and synthesis controls: architecture/family-controls.md
+          - Repeated-workload memory: architecture/memory-followup.md
+          - Partial return conversion: architecture/return-conversion.md
+          - Compound FFI boundaries: architecture/compound-ffi.md
+          - Initialization and threads: architecture/runtime-validation.md
+          - Generated operation sequences: architecture/generated-sequences.md
+          - Binding overhead: architecture/binding-overhead.md
+          - Single-pass formatting: architecture/single-pass-formatting.md
+          - String conversion buffers: architecture/string-buffers.md
+          - Integer literal construction: architecture/integer-literals.md
+          - Direct numeric conversions: architecture/numeric-conversions.md
+          - Collection input buffers: architecture/collection-inputs.md
+          - Returned collections and iterators: architecture/returned-collections.md
+          - Statistics snapshot costs: architecture/statistics-snapshots.md
+          - Handle receipt and anchors: architecture/handle-receipt.md
+          - Production validation: architecture/production-validation.md
+          - Production-like soaks: architecture/soaks.md
+      - Release maintenance:
+          - Upgrading cvc5: architecture/upgrades.md
+          - Packaging: architecture/packaging.md

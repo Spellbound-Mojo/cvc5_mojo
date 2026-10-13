@@ -1,0 +1,10 @@
+expected: sat
+result:  sat
+value for x:  1/6
+value for y:  1/6
+value for x - y:  0
+computed correctly
+expected: unsat
+result: unsat
+unsat core size: 3
+unsat core: [(< 0 a), (< 0 b), (< (+ a b) 1)]

@@ -1,0 +1,4 @@
+cvc5 reports: (not (= (set.inter (set.union A B) C) (set.union (set.inter A C) (set.inter B C)))) is unsat
+cvc5 reports: (not (set.subset (as set.empty (Set Int)) A)) is unsat
+cvc5 reports: (let ((_let_1 (set.singleton 2))) (set.member x (set.inter (set.union (set.singleton 1) _let_1) (set.union _let_1 (set.singleton 3))))) is sat
+For instance, 2 is a member

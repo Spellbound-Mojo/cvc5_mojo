@@ -1,0 +1,54 @@
+spec is DATATYPE list = 
+cons(head: unresolved, tail: [self]) | nil END;
+
+t is (cons 0 nil)
+sort of cons is list
+ sort of nil is list
+t2 is (head (cons 0 nil))
+simplify(t2) is 0
+
+
+ctor: cons(head: Int, tail: list)
+ + args: head: Int
+ + args: tail: list
+
+ctor: nil
+
+t_is_cons is ((_ is cons) (cons 0 nil))
+
+
+t_updated is ((_ update head) (cons 0 nil) 1)
+
+
+term a is of sort (paramlist Int)
+head_a is (head a) of sort Int
+sort of cons is (paramlist T)
+Assert (> (head a) 50)
+Expect sat.
+cvc5: sat
+### Alternatively, use declareDatatype
+t is (cons 0 nil)
+sort of cons is list2
+ sort of nil is list2
+t2 is (head (cons 0 nil))
+simplify(t2) is 0
+
+
+ctor: cons(head: Int, tail: list2)
+ + args: head: Int
+ + args: tail: list2
+
+ctor: nil
+
+t_is_cons is ((_ is cons) (cons 0 nil))
+
+
+t_updated is ((_ update head) (cons 0 nil) 1)
+
+
+term a is of sort (paramlist Int)
+head_a is (head a) of sort Int
+sort of cons is (paramlist T)
+Assert (> (head a) 50)
+Expect sat.
+cvc5: sat

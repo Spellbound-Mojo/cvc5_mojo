@@ -1,0 +1,32 @@
+# The cvc5 release that the bindings are generated from.
+#
+# Single source of truth: every bindgen step reads this file, and
+# `pixi run --locked bump` rewrites it when cvc5 publishes a new release.
+# Do not edit by hand.
+version = "1.4.1"
+tag = "cvc5-1.4.1"
+commit = "2b2e84419f70817ec919a784a48806e79f677240"
+
+# Official prebuilt shared libraries, selected and hashed from the release.
+[binary.linux-64]
+url = "https://github.com/cvc5/cvc5/releases/download/cvc5-1.4.1/cvc5-Linux-x86_64-shared.zip"
+sha256 = "6d7e7c3772824505c68c7b4747482c1c16291253b2438adcac3fc744704252f3"
+root = "cvc5-Linux-x86_64-shared"
+
+[binary.linux-aarch64]
+url = "https://github.com/cvc5/cvc5/releases/download/cvc5-1.4.1/cvc5-Linux-arm64-shared.zip"
+sha256 = "c45ff7dfb2346855215d2f6d68428c06ad6a33bbe95ce4f94e5b02e70e0a6312"
+root = "cvc5-Linux-arm64-shared"
+
+[binary.osx-arm64]
+url = "https://github.com/cvc5/cvc5/releases/download/cvc5-1.4.1/cvc5-macOS-arm64-shared.zip"
+sha256 = "74d766082c44d17a811779a788b997cfe15fde90f814a2ce5e69d00a42509b88"
+root = "cvc5-macOS-arm64-shared"
+
+# Source archive of the same tag. Only the files listed in
+# bindgen/fetch.py:SOURCE_PATHS are extracted: the C API implementation,
+# the Python bindings, and the Python unit tests and examples.
+[source]
+url = "https://github.com/cvc5/cvc5/archive/refs/tags/cvc5-1.4.1.tar.gz"
+sha256 = "5448e82682a65ddbdd7148402f73d48725252e70c9a0e43999c3f305bfbb4f76"
+root = "cvc5-cvc5-1.4.1"

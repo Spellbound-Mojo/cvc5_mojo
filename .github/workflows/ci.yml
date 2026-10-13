@@ -1,0 +1,84 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: prefix-dev/setup-pixi@d3f436a425481402e6a95a1d1fc10331c708cd9e # v0.10.2
+        with:
+          pixi-version: v0.81.0
+          cache: true
+          locked: true
+
+      # Bindings are build output: regenerate everything from the pinned
+      # cvc5 release and require that the committed files match.
+      - name: Regenerate from the pinned cvc5 release
+        run: pixi run generate
+      # Also catches generated files that are new or were deleted.
+      - name: Generated files are committed and reproducible
+        run: |
+          git status --porcelain -- api/ src/ tests/cvc5/
+          test -z "$(git status --porcelain -- api/ src/ tests/cvc5/)"
+
+      - name: Completeness gate
+        run: pixi run check-api
+      - name: Generator regressions
+        run: pixi run generator-tests
+      - name: Soak analysis regressions
+        run: pixi run soak-check
+      - name: Matched-control analysis regressions
+        run: pixi run binding-check
+      - name: Overhead fixture semantics (no timing threshold)
+        run: pixi run --locked binding-benchmark --output .cache/overhead-ci --operations 32 --warmup 2 --repetitions 1 --skip-traces --skip-allocations
+      - name: Statistics snapshot benchmark semantics (no timing threshold)
+        run: pixi run --locked python scripts/benchmark_statistics.py --output .cache/statistics-ci --operations 8 --warmup 2 --repetitions 1 --skip-traces
+      # Grammar formatting and repeated synthesis queries remain separate
+      # native-growth diagnostics. This live-owner subset stays within budget.
+      - name: Matched C and Mojo ownership controls
+        run: pixi run matched-controls --output .cache/matched-ci --modes results,proofs,grammar-empty,grammar-rules,commands,datatype-declarations,datatypes,statistics,statistics-iter,synthesis-copy --operations 20000 --repetitions 1
+      - name: Matched whole-graph cleanup controls
+        run: pixi run matched-controls --output .cache/matched-cleanup --modes datatype-declarations,datatypes,statistics,statistics-iter,synthesis,synthesis-copy --lifetime round --operations 100 --warmup 40 --repetitions 1
+      - name: Binding boundary regressions
+        run: pixi run contracts --jobs 4
+      - name: Ownership regressions without optimization
+        run: pixi run contracts --only ownership --optimization 0 --output .cache/ownership-debug --jobs 4
+      - name: Return-conversion failures without optimization
+        run: pixi run contracts --only return_conversion --optimization 0 --output .cache/conversion-debug --jobs 4
+      - name: Compound FFI comparisons without optimization
+        run: pixi run contracts --only compound --optimization 0 --output .cache/compound-debug --jobs 4
+      - name: Generated operation sequences without optimization
+        run: pixi run contracts --only sequences --optimization 0 --output .cache/sequences-debug --jobs 4
+      - name: Single-pass formatting without optimization
+        run: pixi run contracts --only formatting --optimization 0 --output .cache/formatting-debug --jobs 4
+      - name: String conversion boundaries without optimization
+        run: pixi run contracts --only strings --optimization 0 --output .cache/strings-debug --jobs 4
+      - name: Numeric conversion and integer literal boundaries without optimization
+        run: pixi run contracts --only integer_boundaries,numeric_conversions --optimization 0 --output .cache/integer-debug --jobs 4
+      - name: Collection inputs and returns without optimization
+        run: pixi run contracts --only collections --optimization 0 --output .cache/collection-debug --jobs 4
+      - name: Runtime compatibility
+        run: pixi run runtime-test
+      - name: Runtime initialization without optimization
+        run: pixi run runtime-test --optimization 0 --repetitions 1 --output .cache/runtime-debug --jobs 4
+      - name: Raw-layer, API, smoke, lifetime and thread tests
+        run: pixi run smoke
+      - name: Leak test
+        run: pixi run leaks
+      # Also records the C functions they call, which must match tests/cvc5/calls.json.
+      - name: cvc5's unit tests and examples, translated
+        run: |
+          pixi run cvc5-tests --jobs 4
+          git status --porcelain -- tests/cvc5/calls.json
+          test -z "$(git status --porcelain -- tests/cvc5/calls.json)"
+      - name: Documentation examples
+        run: pixi run docs-test --output .cache/docs-examples --jobs 4
+      - name: Paired Python documentation examples
+        run: pixi run --locked -e oracle docs-oracle-test --output .cache/docs-oracle
+      - name: Package
+        run: pixi run package

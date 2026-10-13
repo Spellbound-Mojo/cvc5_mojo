@@ -1,0 +1,119 @@
+# Watches cvc5 releases. When a new one appears: move the pin, regenerate,
+# run the gates and tests, and open a pull request whose description is the
+# API diff plus test results. A maintainer then resolves whatever the
+# completeness gate flags in bindgen/overrides.toml.
+#
+# One-time repository setup: Settings > Actions > General > Workflow
+# permissions > "Allow GitHub Actions to create and approve pull requests".
+# Pull requests opened with GITHUB_TOKEN do not trigger the ci workflow,
+# which is why this workflow runs the tests itself.
+name: cvc5-update
+
+on:
+  schedule:
+    - cron: "17 6 15 1,7 *" # 15 January and 15 July, 06:17 UTC
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "cvc5 version, e.g. 1.4.2 (default: latest release)"
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: prefix-dev/setup-pixi@d3f436a425481402e6a95a1d1fc10331c708cd9e # v0.10.2
+        with:
+          pixi-version: v0.81.0
+          cache: true
+
+      - name: Move the pin
+        id: bump
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REQUESTED_VERSION: ${{ inputs.version }}
+        run: |
+          args=()
+          if [[ -n "$REQUESTED_VERSION" ]]; then
+            args+=("$REQUESTED_VERSION")
+          fi
+          out="$(pixi run bump "${args[@]}")"
+          echo "$out"
+          if [[ "$out" == *"up to date"* ]]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+          version="$(python3 -c 'import tomllib; print(tomllib.load(open("cvc5-version.toml", "rb"))["version"])')"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Regenerate
+        if: steps.bump.outputs.changed == 'true'
+        run: |
+          pixi run generate
+          pixi run api-diff > api-diff.md
+
+      - name: Gates and tests
+        if: steps.bump.outputs.changed == 'true'
+        id: test
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          {
+            pixi run test &&
+            pixi run runtime-test --optimization 0 --repetitions 1 --output .cache/update-runtime &&
+            pixi run contracts --only ownership --optimization 0 --output .cache/update-ownership &&
+            pixi run contracts --only return_conversion --optimization 0 --output .cache/update-conversion &&
+            pixi run contracts --only compound --optimization 0 --output .cache/update-compound &&
+            pixi run contracts --only sequences --optimization 0 --output .cache/update-sequences &&
+            pixi run contracts --only formatting --optimization 0 --output .cache/update-formatting &&
+            pixi run contracts --only strings --optimization 0 --output .cache/update-strings &&
+            pixi run contracts --only integer_boundaries --optimization 0 --output .cache/update-integers &&
+            pixi run contracts --only collections --optimization 0 --output .cache/update-collections &&
+            pixi run --locked binding-benchmark --output .cache/update-overhead --operations 32 --warmup 2 --repetitions 1 --skip-traces --skip-allocations &&
+            pixi run --locked python scripts/benchmark_statistics.py --output .cache/update-statistics --operations 8 --warmup 2 --repetitions 1 --skip-traces &&
+            pixi run matched-controls --output .cache/update-matched --modes results,proofs,grammar-empty,grammar-rules,commands,datatype-declarations,datatypes,statistics,statistics-iter,synthesis-copy --operations 20000 --repetitions 1 &&
+            pixi run matched-controls --output .cache/update-cleanup --modes datatype-declarations,datatypes,statistics,statistics-iter,synthesis,synthesis-copy --lifetime round --operations 100 --warmup 40 --repetitions 1 &&
+            pixi run docs-test --output .cache/update-docs &&
+            pixi run -e docs docs-check &&
+            pixi run package
+          } 2>&1 | tee test.log
+
+      - name: Open or update the pull request
+        if: steps.bump.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.bump.outputs.version }}
+          OUTCOME: ${{ steps.test.outcome }}
+        run: |
+          branch="cvc5-${VERSION}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "${branch}"
+          git add cvc5-version.toml pixi.toml pixi.lock recipes/ api/ src/ tests/cvc5/
+          git commit -m "Bump cvc5 to ${VERSION}"
+          git push --force origin "${branch}"
+          {
+            echo "Automated upgrade to cvc5 ${VERSION}."
+            echo
+            echo "Gates and tests: **${OUTCOME}**. If the completeness gate failed,"
+            echo "resolve each method that pixi run check-api reports as unresolved"
+            echo "with an entry in bindgen/overrides.toml, then run pixi run generate."
+            echo
+            cat api-diff.md
+            echo
+            echo "<details><summary>Test log (last 150 lines)</summary>"
+            echo
+            echo '```'
+            tail -n 150 test.log
+            echo '```'
+            echo "</details>"
+          } > body.md
+          gh pr create --base main --head "${branch}" \
+              --title "Bump cvc5 to ${VERSION}" --body-file body.md \
+            || gh pr edit "${branch}" --body-file body.md

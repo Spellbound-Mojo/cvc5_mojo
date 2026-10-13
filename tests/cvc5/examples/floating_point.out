@@ -1,0 +1,39 @@
+Show that fused multiplication and addition `(fp.fma RM a b c)`
+is different from `(fp.add RM (fp.mul a b) c)`:
+Expect SAT.
+cvc5: sat
+Value of `a`: (fp #b1 #b11011110 #b00110011001000001001011)
+Value of `b`: (fp #b0 #b10100001 #b00111111110000011111101)
+Value of `c`: (fp #b0 #b11111111 #b00000000000000000000000)
+Value of `(fp.fma RNE a b c)`: (fp #b0 #b11111111 #b00000000000000000000000)
+Value of `(fp.add RNE (fp.mul a b) c)`: (fp #b0 #b11111111 #b10000000000000000000000)
+
+Show that floating-point addition is not associative:
+(a + (b + c)) != ((a + b) + c)
+Expect SAT.
+cvc5: sat
+Value of `a`: (fp #b1 #b11111110 #b11111111111111011111111)
+Value of `b`: (fp #b1 #b11101111 #b00000001000000000000000)
+Value of `c`: (fp #b0 #b11111111 #b00000000000000000000000)
+
+Now, restrict `a` to be either NaN or positive infinity:
+Expect SAT.
+cvc5: sat
+Value of `a`: (fp #b0 #b11111111 #b00000000000000000000000)
+Value of `b`: (fp #b1 #b11101000 #b00000000000000000000000)
+Value of `c`: (fp #b1 #b11111110 #b11111111111111111111111)
+
+Now, try to find a (normal) floating-point number that rounds
+to different integer values for different rounding modes:
+Expect SAT.
+cvc5: sat
+Get value of `d` as floating-point, bit-vector and real:
+Value of `d`: (fp #b1 #b10010011 #b11111111111111100000000)
+Value of `((_ fp.to_ubv 16) RTP d)`: #b1111111111111110
+Value of `((_ fp.to_ubv 16) RTN d)`: #b1111111111111111
+Value of `(fp.to_real d)`: (- 2097120.0)
+
+Finally, try to find a floating-point number between positive
+zero and the smallest positive floating-point number:
+Expect UNSAT.
+cvc5: unsat

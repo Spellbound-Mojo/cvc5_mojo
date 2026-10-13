@@ -1,0 +1,62 @@
+Given the following assertions: (and (<= 0 (f x)) (<= 0 (f y)) (<= (+ (f x) (f y)) 1) (not (p 0)) (p (f y))) 
+
+Prove x /= y is entailed.
+cvc5:  unsat 
+
+Call checkSat to show that the assertions are satisfiable
+cvc5: sat 
+
+Call slv.getValue(...) on terms of interest
+slv.getValue((f x)): 0
+slv.getValue((f y)): 1
+slv.getValue((+ (f x) (f y))): 1
+slv.getValue((p 0)): false
+slv.getValue((p (f y))): true 
+
+Alternatively, iterate over assertions and call slv.getValue(...) on all terms
+slv.getValue((and (<= 0 (f x)) (<= 0 (f y)) (<= (+ (f x) (f y)) 1) (not (p 0)) (p (f y)))): true
+slv.getValue((<= 0 (f x))): true
+slv.getValue(0): 0
+slv.getValue((f x)): 0
+slv.getValue(f): (lambda ((_arg_1 u)) (ite (= (as @u_0 u) _arg_1) 0 1))
+slv.getValue(x): (as @u_0 u)
+slv.getValue((<= 0 (f y))): true
+slv.getValue(0): 0
+slv.getValue((f y)): 1
+slv.getValue(f): (lambda ((_arg_1 u)) (ite (= (as @u_0 u) _arg_1) 0 1))
+slv.getValue(y): (as @u_1 u)
+slv.getValue((<= (+ (f x) (f y)) 1)): true
+slv.getValue((+ (f x) (f y))): 1
+slv.getValue((f x)): 0
+slv.getValue(f): (lambda ((_arg_1 u)) (ite (= (as @u_0 u) _arg_1) 0 1))
+slv.getValue(x): (as @u_0 u)
+slv.getValue((f y)): 1
+slv.getValue(f): (lambda ((_arg_1 u)) (ite (= (as @u_0 u) _arg_1) 0 1))
+slv.getValue(y): (as @u_1 u)
+slv.getValue(1): 1
+slv.getValue((not (p 0))): true
+slv.getValue((p 0)): false
+slv.getValue(p): (lambda ((_arg_1 Int)) (= _arg_1 1))
+slv.getValue(0): 0
+slv.getValue((p (f y))): true
+slv.getValue(p): (lambda ((_arg_1 Int)) (= _arg_1 1))
+slv.getValue((f y)): 1
+slv.getValue(f): (lambda ((_arg_1 u)) (ite (= (as @u_0 u) _arg_1) 0 1))
+slv.getValue(y): (as @u_1 u)
+
+You can also use nested loops to iterate over terms
+term: (<= 0 (f x))
+ + child:  0
+ + child:  (f x)
+term: (<= 0 (f y))
+ + child:  0
+ + child:  (f y)
+term: (<= (+ (f x) (f y)) 1)
+ + child:  (+ (f x) (f y))
+ + child:  1
+term: (not (p 0))
+ + child:  (p 0)
+term: (p (f y))
+ + child:  p
+ + child:  (f y)
+

@@ -1,0 +1,20 @@
+# pixi environments
+.pixi/*
+!.pixi/config.toml
+
+# downloaded cvc5 release (pixi run fetch)
+third_party/
+
+# build outputs, the documentation site and test reports
+build/
+.cache/
+*.mojopkg
+*.mojoc
+
+# editor and OS files
+.DS_Store
+._*
+__pycache__/
+
+# documentation browser tooling; the math distribution is vendored separately
+docs/qa/node_modules/

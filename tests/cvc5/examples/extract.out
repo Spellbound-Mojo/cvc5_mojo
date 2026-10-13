@@ -1,0 +1,4 @@
+Asserting: (= ((_ extract 31 1) a) ((_ extract 30 0) a))
+Check sat assuming: (not (= ((_ extract 31 31) a) ((_ extract 0 0) a)))
+Expect UNSAT
+cvc5: unsat

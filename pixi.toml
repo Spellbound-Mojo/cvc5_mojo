@@ -1,0 +1,84 @@
+[workspace]
+name = "cvc5_mojo"
+version = "1.4.1.0"
+description = "Mojo bindings for the cvc5 SMT solver, generated from cvc5 releases; mirrors the cvc5 Python base API"
+authors = ["Anatoly Vitold Stankyavichyus <anatolyvitold@outlook.com>"]
+license = "Apache-2.0 WITH LLVM-exception"
+channels = ["https://conda.modular.com/max", "https://repo.prefix.dev/modular-community", "conda-forge"]
+platforms = ["linux-64", "linux-aarch64", { platform = "osx-arm64", macos = "15.0" }]
+
+[tasks]
+# The generator pipeline (see docs/content/architecture/overview.md).
+fetch = { cmd = "python -m bindgen.fetch", description = "Download and verify the pinned cvc5 release into third_party/" }
+enums = { cmd = "python -m bindgen.enums", depends-on = ["fetch"], description = "Generate src/cvc5_mojo/enums.mojo" }
+snapshot = { cmd = "python -m bindgen.snapshot", depends-on = ["fetch", { task = "oracle", environment = "oracle" }], description = "Extract and join the C and Python APIs into api/" }
+raw = { cmd = "python -m bindgen.gen_raw", depends-on = ["snapshot"], description = "Generate src/cvc5_mojo/_c/raw.mojo, the raw layer" }
+api = { cmd = "python -m bindgen.gen_api", depends-on = ["snapshot"], description = "Generate the base API classes and src/cvc5_mojo/__init__.mojo" }
+translate = { cmd = "python -m bindgen.translate", depends-on = ["snapshot"], description = "Translate cvc5's Python unit tests and examples into tests/cvc5/" }
+generate = { depends-on = ["enums", "snapshot", "raw", "api", "translate", { task = "oracle", environment = "oracle" }], description = "Regenerate every generated file" }
+check-api = { cmd = "python -m bindgen.snapshot --check", depends-on = ["fetch", { task = "oracle", environment = "oracle" }], description = "Completeness gate: every Python method has a binding status" }
+api-diff = { cmd = "python -m bindgen.diff", description = "Markdown summary of API changes against the committed snapshot" }
+bump = { cmd = "python -m bindgen.bump", description = "Move the pin to the latest (or given) cvc5 release" }
+
+# Tests and packaging.
+smoke = { cmd = "mojo run -I src tests/smoke/test_raw.mojo && mojo run -I src tests/smoke/test_api.mojo && mojo run -I src tests/smoke/test_smoke.mojo && mojo run -I src tests/smoke/test_lifetimes.mojo && mojo run -I src tests/smoke/test_threads.mojo", depends-on = ["fetch"] }
+# Built, not `mojo run`: under the JIT, cvc5 reuses memory the compiler freed and hides growth.
+leaks = { cmd = "mkdir -p build && mojo build -I src tests/smoke/test_leaks.mojo -o build/test_leaks && build/test_leaks", depends-on = ["fetch"], description = "Leak test: wrappers release every cvc5 reference they take" }
+cvc5-tests = { cmd = "python scripts/run_cvc5_tests.py", depends-on = ["fetch"], description = "Build and run cvc5's unit tests and examples, translated to Mojo; the examples must print what Python prints" }
+generator-tests = { cmd = "python -m unittest discover -s tests/bindgen -v", depends-on = ["fetch"], description = "Generator mutation and negative-test classification regressions" }
+contracts = { cmd = "python scripts/run_contract_tests.py", depends-on = ["fetch"], description = "String, formatting, null, integer, retention, ownership, return-conversion, compound FFI and seeded sequence regressions across import and assertion modes" }
+runtime-test = { cmd = "python scripts/check_runtime_loading.py", depends-on = ["fetch"], description = "Loading failures, initialization cleanup and independent-thread error isolation across import and assertion modes" }
+soak = { cmd = "python scripts/run_soak_tests.py", description = "CAS-style soaks using cached dependencies; requires --output and does not fetch" }
+batch-benchmark = { cmd = "python scripts/benchmark_solver_batches.py", description = "Sequential solver recycling benchmark using cached dependencies; requires --output" }
+matched-controls = { cmd = "python scripts/run_matched_controls.py", description = "Matched C/raw/public binding controls using cached dependencies; requires --output" }
+binding-benchmark = { cmd = "python scripts/benchmark_binding_overhead.py", description = "Isolated C/raw/public overhead baseline with separate call and allocation diagnostics; cached dependencies only" }
+binding-check = { cmd = "python -m unittest discover -s tests/binding -v", description = "Matched-control library identity, memory attribution, owner cleanup, and reference-count analysis regressions" }
+verify-binding = { cmd = "python scripts/verify_binding.py", description = "Core or extended binding verification from cached dependencies; requires a fresh --output" }
+sanitizers = { cmd = "python scripts/check_sanitizers.py", description = "ASan/LSan sensitivity controls and binding contracts using cached dependencies; requires --output" }
+soak-check = { cmd = "python -m unittest discover -s tests/soak -v", description = "Soak memory-trend and checkpoint analysis regressions" }
+test = { depends-on = ["check-api", "generator-tests", "soak-check", "binding-check", "smoke", "leaks", "contracts", "runtime-test", "cvc5-tests"] }
+package = "mkdir -p build && mojo precompile src/cvc5_mojo -o build/cvc5_mojo.mojoc"
+docs-test = { cmd = "python scripts/verify_docs_examples.py", depends-on = ["fetch"], description = "Build and run every documentation example on both import routes" }
+
+[dependencies]
+mojo = "==1.1.0"
+apn_mojo = "==1.0.1"
+python = ">=3.11"
+c-compiler = "*"
+llvm-tools = ">=20,<23"
+
+[target.linux-64.dependencies]
+# Mojo's runtime links against glibc >= 2.34 symbols; the default conda
+# sysroot (2.28) makes `mojo build` fail with undefined dlerror@GLIBC_2.34.
+sysroot_linux-64 = ">=2.34"
+
+[target.linux-aarch64.dependencies]
+sysroot_linux-aarch64 = ">=2.34"
+
+# Oracle environment: the official Python bindings at the same cvc5 version,
+# for differential tests that compare Mojo output with Python output.
+[feature.oracle.dependencies]
+python = "3.13.*"
+
+[feature.oracle.pypi-dependencies]
+cvc5 = "==1.4.1"
+
+[feature.oracle.tasks]
+docs-oracle-test = { cmd = "python scripts/verify_docs_examples.py --oracle-only", description = "Check paired Python examples against the same expected output as Mojo" }
+oracle = { cmd = "python -m bindgen.oracle", depends-on = [{ task = "fetch", environment = "default" }], description = "Record what cvc5's Python examples print under the official bindings, into tests/cvc5/examples/" }
+
+# Documentation site: the same pins as our other projects. The reference is
+# rendered from the committed snapshot, so no Mojo toolchain is needed.
+[feature.docs.dependencies]
+python = "3.14.*"
+mkdocs = "==1.6.1"
+pygments = "==2.19.2"
+
+[feature.docs.tasks]
+docs-build = "python -m mkdocs build --strict"
+docs-serve = "python -m mkdocs serve"
+docs-check = "python scripts/check_docs.py"
+
+[environments]
+oracle = { features = ["oracle"], no-default-feature = true }
+docs = { features = ["docs"], no-default-feature = true }

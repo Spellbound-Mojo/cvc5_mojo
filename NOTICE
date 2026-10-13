@@ -1,0 +1,16 @@
+cvc5_mojo
+Copyright the cvc5_mojo contributors.
+Licensed under the Apache License v2.0 with LLVM Exceptions (see LICENSE).
+
+This project generates Mojo bindings for cvc5 (https://github.com/cvc5/cvc5).
+Generated files (api/ and every file under src/cvc5_mojo/ except
+src/cvc5_mojo/_c/ffi.mojo) contain names, enum values and documentation
+derived from cvc5, which is copyright (C) 2009-2026 by its authors and
+contributors and is distributed under the modified BSD (BSD-3-Clause) license.
+
+Binary packages built from recipes/cvc5_mojo bundle the official cvc5
+shared libraries, which include or link:
+  - cvc5: BSD-3-Clause
+  - MiniSat and CaDiCaL: MIT
+  - GMP, MPFR and LibPoly: LGPL-3.0
+See the cvc5 COPYING file and licenses/ directory shipped with each package.

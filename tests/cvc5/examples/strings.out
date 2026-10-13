@@ -1,0 +1,3 @@
+cvc5 reports: (and (= (str.++ x "ab" y) (str.++ "abc" z)) (>= (str.len y) 0) (str.in_re (str.++ s1 s2) (re.union (re.++ (str.to_re "ab") (re.* (re.range "c" "e")) (str.to_re "f")) (str.to_re "g") (str.to_re "h")))) is sat
+x =  ""
+ s1.s2 = "abf"

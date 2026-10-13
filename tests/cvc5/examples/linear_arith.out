@@ -1,0 +1,9 @@
+Given the assertions (and (>= x (* 3 y)) (<= x y) (< (- 2) x))
+Prove that (<= (- y x) (/ 2 3)) with cvc5
+cvc5 should report UNSAT
+Result from cvc5 is: unsat
+
+Show that the assertions are consistent with
+ (= (- y x) (/ 2 3)) with cvc5
+cvc5 should report SAT
+Result from cvc5 is: sat
