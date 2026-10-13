@@ -203,7 +203,7 @@ commands; `--only` selects exact gate names. Reports are checkpointed, incomplet
 runs cannot pass, and a failed gate stops the runner with a nonzero status.
 Use a fresh output directory for each run.
 
-`.github/workflows/binding-extended.yml` runs weekly or manually and uploads
+`.github/workflows/binding-extended.yml` runs when started manually and uploads
 reports, traces, mappings, sequence reproducers and timing baselines for 30 days.
 It prepares pinned dependencies explicitly before invoking the cached runner.
 The workflow has been defined locally; no remote run or publication is claimed.

@@ -114,12 +114,15 @@ preserves earlier observations except native functions that have no public
 call site left in the generated bindings.
 
 CI runs `generate` and requires that it leaves no diff. It then runs
-all the `test` gates, matched live-owner and complete-graph controls, `docs-test`,
-and `package`. The overhead fixtures also run a short semantic check without
+all the `test` gates, the complete-graph controls, `docs-test`, and
+`package`. The overhead fixtures also run a short semantic check without
 a timing threshold. String, integer-boundary, collection-input/return, formatting, ownership, return-conversion, compound, sequence, and runtime fixtures also run at O0.
 After `cvc5-tests`, it also requires `tests/cvc5/calls.json` to be
 unchanged.
-The documentation workflow runs `docs-check`.
+The documentation workflow runs `docs-check`. The `Linux ARM64` workflow
+builds the conda recipe and runs its tests on an ARM runner, with the
+channel's `rattler-build`: from the checkout on each push, and from the
+recipe's release tag when started manually with `source: tag`.
 
 ## Rules
 

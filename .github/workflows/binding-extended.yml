@@ -2,8 +2,6 @@ name: extended binding verification
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '17 4 * * 1'
 
 permissions:
   contents: read

@@ -138,9 +138,9 @@ fresh Pixi project with only the three channels,
 the quickstart, integer, plugin, and oracle examples ran with `mojo run`
 and as a built executable, without `-I` or `CVC5_MOJO_LIBRARY`. In the
 macOS package the aliases are symlinks and the upstream code signatures
-verify. Native Linux ARM64 execution is first exercised by the channel's
-CI; once the repository is public, the `Linux ARM64` workflow also runs on
-each push.
+verify. The `Linux ARM64` workflow builds the recipe and runs its tests
+on an ARM runner, the way the channel's CI does: from the checkout on each
+push, and from the release tag on demand.
 
 ## Licenses
 

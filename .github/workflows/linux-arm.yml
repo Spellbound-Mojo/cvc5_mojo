@@ -1,3 +1,9 @@
+# Builds and tests the conda package on a native ARM64 runner, as
+# modular-community's CI does: recipes/cvc5_mojo/recipe.yaml, built with the
+# channel's rattler-build and channels, then the recipe's tests. Pushes and
+# pull requests build from the checkout. A manual run with `source: tag`
+# builds from the release tag the recipe names, which is what the channel
+# builds.
 name: Linux ARM64
 
 on:
@@ -5,30 +11,47 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      source:
+        description: "Build from this checkout or from the recipe's release tag"
+        type: choice
+        options: [checkout, tag]
+        default: checkout
 
 permissions:
   contents: read
 
 jobs:
-  targeted:
+  package:
     runs-on: ubuntu-24.04-arm
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: prefix-dev/setup-pixi@d3f436a425481402e6a95a1d1fc10331c708cd9e # v0.10.2
         with:
           pixi-version: v0.81.0
-          locked: true
-      - name: Verify the native architecture and regenerate
+          run-install: false
+      - name: Select the recipe source
+        env:
+          SOURCE: ${{ inputs.source || 'checkout' }}
         run: |
           test "$(uname -m)" = aarch64
-          pixi run --locked generate
-          test -z "$(git status --porcelain -- api/ src/ tests/cvc5/)"
-      - name: Native package and platform regressions
-        run: pixi run --locked python -m unittest tests.bindgen.test_platforms tests.bindgen.test_packaging tests.bindgen.test_bump -v
-      - name: Quickstart from source and precompiled module
-        run: pixi run --locked docs-test --only quickstart.mojo --output build/arm-quickstart
-      - name: Callback and null-object contracts
-        run: pixi run --locked contracts --only plugins,oracles,null_printing --optimization 3 --output build/arm-contracts --jobs 2
-      - name: Stage the native ARM libraries
-        run: pixi run --locked python -m bindgen.package_native --release third_party/cvc5 --prefix build/arm-prefix
+          mkdir -p "$RUNNER_TEMP/recipe"
+          python3 - "$SOURCE" recipes/cvc5_mojo/recipe.yaml "$RUNNER_TEMP/recipe/recipe.yaml" "$GITHUB_WORKSPACE" <<'EOF'
+          import re, sys
+          source, recipe, output, checkout = sys.argv[1:]
+          text = open(recipe).read()
+          if source == "checkout":
+              text, count = re.subn(r"(?m)^  - git: \S+\n    tag: .*\n",
+                                    f"  - path: {checkout}\n    use_gitignore: true\n", text)
+              assert count == 1, "the recipe must have exactly one git source"
+          open(output, "w").write(text)
+          EOF
+          echo "Building from the $SOURCE"
+      # The rattler-build range follows the pin in modular-community's pixi.toml.
+      - name: Build and test the package
+        run: >-
+          pixi exec --spec "rattler-build>=0.30.0,<0.31" -- rattler-build build
+          --recipe "$RUNNER_TEMP/recipe/recipe.yaml"
+          -c conda-forge -c https://conda.modular.com/max -c https://prefix.dev/modular-community
+          --output-dir "$RUNNER_TEMP/out"

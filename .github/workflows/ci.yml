@@ -38,10 +38,9 @@ jobs:
         run: pixi run --locked binding-benchmark --output .cache/overhead-ci --operations 32 --warmup 2 --repetitions 1 --skip-traces --skip-allocations
       - name: Statistics snapshot benchmark semantics (no timing threshold)
         run: pixi run --locked python scripts/benchmark_statistics.py --output .cache/statistics-ci --operations 8 --warmup 2 --repetitions 1 --skip-traces
-      # Grammar formatting and repeated synthesis queries remain separate
-      # native-growth diagnostics. This live-owner subset stays within budget.
-      - name: Matched C and Mojo ownership controls
-        run: pixi run matched-controls --output .cache/matched-ci --modes results,proofs,grammar-empty,grammar-rules,commands,datatype-declarations,datatypes,statistics,statistics-iter,synthesis-copy --operations 20000 --repetitions 1
+      # The live-owner growth controls are not a gate here: on GitHub's runners
+      # their growth over C varied by several MiB between runs. Run them
+      # locally; see docs/content/architecture/family-controls.md.
       - name: Matched whole-graph cleanup controls
         run: pixi run matched-controls --output .cache/matched-cleanup --modes datatype-declarations,datatypes,statistics,statistics-iter,synthesis,synthesis-copy --lifetime round --operations 100 --warmup 40 --repetitions 1
       - name: Binding boundary regressions
