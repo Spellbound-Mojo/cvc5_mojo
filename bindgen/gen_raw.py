@@ -49,8 +49,13 @@ from . import c_headers, config, enums
 ORIGIN = "MutUntrackedOrigin"
 
 # C scalar types: Mojo type, size in bytes, and whether the C type is signed.
+# None leaves the sign unchecked: for floating point, and for char and
+# wchar_t, whose signedness C leaves to the platform (both are unsigned on
+# Linux ARM64). Those two cross only behind pointers, as bytes and code
+# points, which `check` enforces.
+SIGN_BY_PLATFORM = ("char", "wchar_t")
 SCALARS = {
-    "char": ("Int8", 1, True),
+    "char": ("Int8", 1, None),
     "int": ("Int32", 4, True),
     "int32_t": ("Int32", 4, True),
     "uint32_t": ("UInt32", 4, False),
@@ -58,7 +63,7 @@ SCALARS = {
     "uint64_t": ("UInt64", 8, False),
     "size_t": ("UInt", 8, False),
     "double": ("Float64", 8, None),
-    "wchar_t": ("Int32", 4, True),
+    "wchar_t": ("Int32", 4, None),
     "char32_t": ("UInt32", 4, False),
 }
 
@@ -172,7 +177,10 @@ def check(snap, bound):
     used = set()
     for name in bound:
         f = snap["c_functions"][name]
-        used |= {_split(t)[0] for t in [f["returns"]] + [p["type"] for p in f["params"]]}
+        for base, depth, _ in map(_split, [f["returns"]] + [p["type"] for p in f["params"]]):
+            if base in SIGN_BY_PLATFORM and depth == 0:
+                raise ValueError(f"{name} passes {base} by value; its sign differs between platforms")
+            used.add(base)
     lines = []
     for base in sorted(used):
         kind = snap["c_types"].get(base, {}).get("kind")

@@ -2,7 +2,7 @@
 import unittest
 from unittest.mock import patch
 
-from bindgen import config
+from bindgen import c_headers, config, gen_raw
 
 
 class PlatformTests(unittest.TestCase):
@@ -33,3 +33,17 @@ class PlatformTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class TypeMappingTests(unittest.TestCase):
+    def test_platform_signed_characters_cross_only_behind_pointers(self):
+        # char and wchar_t are unsigned on Linux ARM64 and signed elsewhere.
+        with patch.object(c_headers, 'compile_check') as compile_check:
+            for ctype in ('const char*', 'const wchar_t*'):
+                snap = {'c_functions': {'f': {'returns': 'void', 'params': [{'type': ctype}]}}, 'c_types': {}}
+                gen_raw.check(snap, {'f': {}})
+            self.assertEqual(compile_check.call_count, 2)
+            for ctype in ('char', 'wchar_t'):
+                snap = {'c_functions': {'f': {'returns': ctype, 'params': []}}, 'c_types': {}}
+                with self.subTest(ctype=ctype), self.assertRaisesRegex(ValueError, 'by value'):
+                    gen_raw.check(snap, {'f': {}})

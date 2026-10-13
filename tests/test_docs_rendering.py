@@ -30,8 +30,8 @@ class Signatures(unittest.TestCase):
         self.assertIn('def isSat(self) raises -> Bool', result)
         self.assertIn('**Upstream Python signature**', result)
         self.assertIn('Mojo uses the `Writable` protocol', result)
-        plugin = reference.class_markdown('Plugin', docs.snapshot(), lambda c, m: '#')
-        self.assertIn('Not mirrored: Callbacks from cvc5 into Mojo', plugin)
+        term = reference.class_markdown('Term', docs.snapshot(), lambda c, m: '#')
+        self.assertIn('Not mirrored: Converts to Python objects', term)
 
 
 class Excerpts(unittest.TestCase):
