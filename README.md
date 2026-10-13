@@ -1,6 +1,6 @@
-# cvc5 Mojo
+# CVC5 Mojo
 
-cvc5 Mojo lets Mojo programs use the [cvc5](https://cvc5.github.io) SMT
+CVC5 Mojo lets Mojo programs use the [cvc5](https://cvc5.github.io) SMT
 solver. Its API follows cvc5's Python bindings, with the same classes,
 methods, and enum names, so cvc5's Python documentation and examples carry
 over. The bindings are generated from the cvc5 release they bind.
