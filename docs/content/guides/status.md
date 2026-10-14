@@ -2,8 +2,9 @@
 
 ## Scope
 
-The bindings target **Mojo 1.1.0 on Linux x86-64, Linux ARM64, and macOS Apple Silicon**, with cvc5 1.4.1. You
-work from a source checkout; a conda package is planned. The
+The bindings target **Mojo 1.1.0 on Linux x86-64, Linux ARM64, and macOS Apple Silicon**, with cvc5 1.4.1. Install the
+[conda package](../start/installation.md#install-the-package) or work from a
+source checkout. The
 [verification chapter](../architecture/verification.md) describes the checks
 and what their results establish.
 
@@ -12,7 +13,7 @@ and what their results establish.
 | Compiler | Mojo 1.1.0, pinned through Pixi. Other versions are not supported. |
 | cvc5 | 1.4.1. Older releases terminate the process when the API is misused, so they are not supported. |
 | Linux x86-64 | Supported and tested |
-| Linux ARM64 | Packaged, but not yet run natively; see [platform validation](../architecture/packaging.md#platform-validation) |
+| Linux ARM64 | Supported; the package's tests run on a native ARM runner, and the full development gate runs on Linux x86-64. See [platform validation](../architecture/packaging.md#platform-validation) |
 | macOS Apple Silicon | macOS 15+. Supported and tested; some development checks are [Linux-only](../contributing/development.md#environment) |
 | Intel Macs, 32-bit ARM | Not supported |
 

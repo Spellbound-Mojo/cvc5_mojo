@@ -1,10 +1,11 @@
 # Release notes
 
-## 1.4.1.0 — in preparation
+## 1.4.1.0 — 2026-10-14
 
-This is the first planned modular-community release. It binds **cvc5 1.4.1**
-on **Linux x86-64, Linux ARM64, and macOS Apple Silicon**, using **Mojo 1.1.0** and **apn_mojo 1.0.1**. The package
-is not published yet, and its source tag `v1.4.1.0` has not been created.
+The first release, published in the modular-community channel through
+[modular/modular-community#399](https://github.com/modular/modular-community/pull/399). It binds **cvc5 1.4.1**
+on **Linux x86-64, Linux ARM64, and macOS Apple Silicon**, using **Mojo 1.1.0** and **apn_mojo 1.0.1**. It is built
+from the tag [`v1.4.1.0`](https://github.com/Spellbound-Mojo/cvc5_mojo/tree/v1.4.1.0).
 The last version component is the bindings revision; a bindings-only
 update would be `1.4.1.1`.
 
@@ -31,8 +32,8 @@ library with relative symlinks for its aliases. It preserves the upstream
 license notices and records the native library inventory. The package
 requires Mojo 1.1 (`>=1.1.0,<1.2.0a0`), apn_mojo 1.0.1, and on Linux
 `libstdcxx >=11`. See [installation](start/installation.md) for the
-commands to use after publication and [packaging](architecture/packaging.md)
-for remaining work.
+install commands and [packaging](architecture/packaging.md) for how the
+package is built.
 
 ### Compatibility and limits
 
@@ -49,6 +50,8 @@ On Linux x86-64 the full test gate and every documentation example pass.
 The conda recipe builds and passes its tests with the channel's
 `rattler-build` on Linux x86-64 and on macOS Apple Silicon, where cvc5's
 translated unit tests and examples also pass. A fresh consumer project
-installs the package and runs the examples on both. Linux ARM64 has not
-run natively before submission; the channel's CI is its first native
-build and test. See [platform validation](architecture/packaging.md#platform-validation).
+installs the package and runs the examples on both. On Linux ARM64 the
+package builds from the release tag and passes the recipe's tests on a
+native ARM runner. The channel's CI built and tested all three platforms
+before publishing them, and a fresh project installs the published package
+and runs the quickstart. See [platform validation](architecture/packaging.md#platform-validation).

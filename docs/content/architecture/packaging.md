@@ -1,8 +1,8 @@
 # Packaging
 
-Version **1.4.1.0** is being prepared for the modular-community conda
-channel. The recipe builds and passes its tests with the channel's
-`rattler-build` on Linux x86-64 and macOS; publication is pending.
+Version **1.4.1.0** is published in the
+[modular-community conda channel](https://prefix.dev/channels/modular-community/packages/cvc5_mojo)
+for linux-64, linux-aarch64, and osx-arm64; see [publication](#publication).
 
 ## Channel and recipe
 
@@ -11,7 +11,7 @@ downloads the matching official shared build and checksum for each
 platform. The macOS package is for Apple Silicon.
 Intel Macs and 32-bit ARM builds are skipped.
 The [installation guide](../start/installation.md#install-the-package)
-lists the consumer commands to use once the package is published.
+lists the consumer commands.
 
 - **Compiler.** Build and host environments use Mojo 1.1.0. The run
   requirement, `pin_compatible('mojo-compiler', upper_bound='x.x')`,
@@ -38,13 +38,13 @@ both to the new cvc5 version with revision zero.
 
 The recipe builds from the tag `v${{ version }}`, currently `v1.4.1.0`, of
 [Spellbound-Mojo/cvc5_mojo](https://github.com/Spellbound-Mojo/cvc5_mojo).
-As of 2026-10-13 neither the public repository nor the tag exists. Before
-submitting the recipe:
+For each release, before submitting the recipe:
 
 1. Review and commit the release contents, including generated files.
-2. Publish the release tree as one commit in the public repository, and
-   push `v1.4.1.0` at that commit; keep published release tags fixed.
-3. Build the recipe from that tag and record the resolved commit in the
+2. Push the release commit to the public repository and tag it
+   `v<version>`; keep published release tags fixed.
+3. Build the recipe from that tag, on an ARM runner too (the `Linux ARM64`
+   workflow with `source: tag`), and record the resolved commit in the
    release notes or channel PR.
 
 For local recipe validation before publication, use a temporary recipe
@@ -118,7 +118,7 @@ compilation so it is not distributed as package content.
 | Target | Package build and recipe tests | Native execution |
 |---|---|---|
 | `linux-64` | Built and tested locally with `rattler-build` 0.30.0 | The full `test` gate, `docs-test`, and a fresh consumer installation |
-| `linux-aarch64` | Configured; first built by the channel's CI | Not validated before submission; the channel's CI runs the recipe tests on an ARM runner |
+| `linux-aarch64` | Built from the release tag and tested by the `Linux ARM64` workflow on an ARM runner | The recipe's tests: smoke, lifetime, and API tests, and the plugin and oracle examples |
 | `osx-arm64` | Built and tested locally with `rattler-build` 0.30.0 on macOS 26.6.2 (M2 Max) | cvc5's translated tests and examples, the smoke tests other than `test_threads.mojo`, and a fresh consumer installation; see [development](../contributing/development.md#environment) for the Linux-only gates |
 
 All targets use cvc5 1.4.1, Mojo 1.1.0, and apn_mojo 1.0.1. `fetch` places
@@ -151,11 +151,19 @@ the complete upstream `licenses/` directory into
 in its package license metadata. The native inventory lists their paths
 so the staged files can be checked against the source archive.
 
-## Remaining work
+## Publication
 
-- Publish the reviewed source as `Spellbound-Mojo/cvc5_mojo` with the tag
-  `v1.4.1.0`, rebuild the recipe from the tag, and submit it to
-  modular-community.
-- After the upload succeeds, verify a fresh installation on all three
-  platforms and update the installation page and
-  [release notes](../releases.md).
+[modular/modular-community#399](https://github.com/modular/modular-community/pull/399) added the recipe and was merged on 2026-10-14.
+The channel's CI built and tested the package on all three platforms
+before uploading it:
+
+| Platform | Build |
+|---|---|
+| `linux-64` | `cvc5_mojo-1.4.1.0-hb0f4dca_0` |
+| `linux-aarch64` | `cvc5_mojo-1.4.1.0-he8cfe8b_0` |
+| `osx-arm64` | `cvc5_mojo-1.4.1.0-h60d57d3_0` |
+
+A fresh Pixi project with only the three channels installed the published
+package with `pixi add cvc5_mojo` and ran the quickstart on Linux x86-64. A
+later version needs a new tag and a pull request that updates the recipe in
+modular-community; see [version and source](#version-and-source).

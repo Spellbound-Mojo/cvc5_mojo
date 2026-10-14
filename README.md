@@ -28,9 +28,33 @@ def main() raises:
     print(negative_square, "is", result)   # (< (* x x) 0) is unsat
 ```
 
-## Getting started
+## Install
 
-Install [Pixi](https://pixi.sh/), then get the source and its dependencies:
+Version **1.4.1.0** is published in the
+[modular-community channel](https://prefix.dev/channels/modular-community/packages/cvc5_mojo)
+for Linux x86-64 (`linux-64`), Linux ARM64 (`linux-aarch64`), and macOS 15+
+Apple Silicon (`osx-arm64`). Install [Pixi](https://pixi.sh/), then create a
+project with the three channels and add Mojo and the bindings:
+
+```sh
+pixi init solver-project --platform linux-64 --platform linux-aarch64 \
+  --platform osx-arm64 -c https://conda.modular.com/max \
+  -c https://repo.prefix.dev/modular-community -c conda-forge
+cd solver-project
+pixi add "mojo==1.1.0" "cvc5_mojo==1.4.1.0"
+```
+
+Save the program above as `main.mojo` and run it with
+`pixi run --locked mojo run main.mojo`. The package includes cvc5's native
+solver and parser libraries, and installs apn_mojo 1.0.1 for exact integers
+and fractions; no `-I` flag or library path is needed. See
+[installation](docs/content/start/installation.md) and the
+[release notes](docs/content/releases.md).
+
+## Work from a checkout
+
+To change the bindings or the generator, get the source and its
+dependencies:
 
 ```sh
 git clone https://github.com/Spellbound-Mojo/cvc5_mojo.git
@@ -41,31 +65,10 @@ pixi run --locked mojo run -I src docs/examples/quickstart.mojo
 ```
 
 Run the commands from the repository root. `--locked` keeps every dependency
-at the version in `pixi.lock`. The release targets Mojo 1.1.0 on Linux
-x86-64 (`linux-64`), Linux ARM64 (`linux-aarch64`), and macOS 15+
-Apple Silicon (`osx-arm64`), with separate native archives and locked
-dependencies. Linux ARM64 has not run natively yet; see [platform validation](docs/content/architecture/packaging.md#platform-validation).
-A conda package is planned; use a checkout until publication.
-
-The first package release is being prepared as **1.4.1.0**. After it is
-published on modular-community, a consumer project can install it with:
-
-```sh
-pixi init solver-project --platform linux-64 --platform linux-aarch64 \
-  --platform osx-arm64 -c https://conda.modular.com/max \
-  -c https://repo.prefix.dev/modular-community -c conda-forge
-cd solver-project
-pixi add "mojo==1.1.0" "cvc5_mojo==1.4.1.0"
-```
-
-The package will include the native solver and parser libraries. See
-[installation](docs/content/start/installation.md) and the
-[release notes](docs/content/releases.md) for availability and compatibility.
-
-Pixi installs `apn_mojo` 1.0.1 from the
-[modular-community channel](https://prefix.dev/channels/modular-community/packages/apn_mojo)
-for exact integers and fractions. The channel and version are declared in
-`pixi.toml`, and `pixi.lock` records the resolved build and checksum.
+at the version in `pixi.lock`, including the build and checksum of
+[apn_mojo](https://prefix.dev/channels/modular-community/packages/apn_mojo).
+Each platform has its own native archive; see
+[platform validation](docs/content/architecture/packaging.md#platform-validation).
 
 ## What the bindings cover
 

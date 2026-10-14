@@ -2,7 +2,7 @@
 
 <div class="hero" markdown="1">
 
-cvc5 Mojo lets Mojo programs use the [cvc5](https://cvc5.github.io) SMT
+CVC5 Mojo lets Mojo programs use the [cvc5](https://cvc5.github.io) SMT
 solver. Its API follows cvc5's Python bindings, with the same classes,
 methods, and enum names, so cvc5's Python documentation and examples carry
 over. You build terms with a `TermManager`, assert them on a `Solver`, and
@@ -10,9 +10,9 @@ ask for a satisfiability result, a model, an unsat core, a proof, or a
 synthesized function.
 
 The bindings are generated from the cvc5 release they bind, currently cvc5
-1.4.1. The release targets Mojo 1.1.0 on Linux x86-64, Linux ARM64, and macOS Apple Silicon; see
-[platform validation](architecture/packaging.md#platform-validation).
-Work from a source checkout for now; a conda package is planned.
+1.4.1. Version 1.4.1.0 is published in the modular-community conda channel
+for Mojo 1.1 on Linux x86-64, Linux ARM64, and macOS Apple Silicon:
+`pixi add cvc5_mojo` installs it.
 
 <div class="hero-actions" markdown="1">
 [Get started](start/installation.md){ .button .primary }

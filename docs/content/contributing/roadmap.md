@@ -410,13 +410,12 @@ further Python syntax translation.
   modular-community, pinned in `pixi.toml` and resolved in `pixi.lock`.
 - Configure Linux x86-64, Linux ARM64, and macOS Apple Silicon sources,
   inventories, loading, and locked dependencies (done). Native macOS
-  execution is validated; Linux ARM64 is released without a native run
-  before submission, and the channel's CI is its first.
+  execution is validated, and the `Linux ARM64` workflow builds and tests
+  the package on an ARM runner.
 - Stage the extracted native dependency closure with deduplicated libraries
   and the upstream license notices (done).
 - Version the package as cvc5's version and a revision (done: `1.4.1.0`).
-  The recipe builds from `v1.4.1.0` of `Spellbound-Mojo/cvc5_mojo`;
-  publishing that repository and tag is pending.
+  The recipe builds from `v1.4.1.0` of `Spellbound-Mojo/cvc5_mojo` (done).
 - Tighten the Mojo runtime pin and review external native runtime
   requirements (done): Mojo 1.1.x, and `libstdcxx >=11` on Linux, checked
   against the snapshot; no minimum macOS beyond Mojo's own.
@@ -425,10 +424,11 @@ further Python syntax translation.
   [platform validation](../architecture/packaging.md#platform-validation)).
 - From the first bump that deprecates a method, keep the methods a later
   cvc5 deprecates, marked with `@deprecated`.
-- Submit to modular-community.
+- Submit to modular-community (done: 1.4.1.0 through
+  [#399](https://github.com/modular/modular-community/pull/399), merged 2026-10-14).
 - Enable the twice-yearly upgrade workflow and its PR permission; report
   regeneration failures without losing the upgrade review output.
-- Publish this site once the repository is public.
+- Publish this site (done: <https://spellbound-mojo.github.io/cvc5_mojo/>).
 
 ### C4: extensions
 

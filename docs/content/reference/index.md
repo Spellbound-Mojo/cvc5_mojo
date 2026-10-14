@@ -1,6 +1,6 @@
 # API reference
 
-This reference covers the base API of cvc5's Python bindings as cvc5 Mojo
+This reference covers the base API of cvc5's Python bindings as CVC5 Mojo
 mirrors it, for the pinned cvc5 release. Every page is generated from the
 snapshot `api/cvc5-api.json`, the record of cvc5's API that the generator
 works from:

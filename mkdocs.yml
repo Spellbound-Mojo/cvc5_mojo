@@ -1,4 +1,4 @@
-site_name: cvc5 Mojo
+site_name: CVC5 Mojo
 site_description: Learn constraint solving in Mojo with tutorials, transcendental functions, tested examples, API reference and architecture.
 site_url: https://spellbound-mojo.github.io/cvc5_mojo/
 repo_url: https://github.com/Spellbound-Mojo/cvc5_mojo

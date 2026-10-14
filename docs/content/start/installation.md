@@ -7,16 +7,15 @@
 | Platform | Linux x86-64 (`linux-64`), Linux ARM64 (`linux-aarch64`), or macOS 15+ Apple Silicon (`osx-arm64`); see [platform validation](../architecture/packaging.md#platform-validation) |
 | Compiler | Mojo 1.1.0, pinned through Pixi |
 | Exact numbers | apn_mojo 1.0.1, installed by Pixi from the modular-community channel |
-| Solver | cvc5 1.4.1, the matching official shared build, downloaded and checked against its sha256 |
-| Tools | [Pixi](https://pixi.sh), which installs Mojo, Python, and a C compiler |
+| Solver | cvc5 1.4.1, the matching official shared build: included in the package, and downloaded and checked against its sha256 in a checkout |
+| Tools | [Pixi](https://pixi.sh), which installs Mojo, and in a checkout also Python and a C compiler |
 
 ## Install the package
 
-Version **1.4.1.0 is being prepared and is not published yet**. Until it is
-available, use the [checkout instructions](#work-from-a-checkout).
-
-After publication, create a consumer project with the release platforms and
-all three channels, then install the bindings and the tested compiler:
+Version **1.4.1.0** is published in the
+[modular-community channel](https://prefix.dev/channels/modular-community/packages/cvc5_mojo).
+Create a consumer project with the release platforms and all three
+channels, then install the bindings and the tested compiler:
 
 ```sh
 pixi init solver-project --platform linux-64 --platform linux-aarch64 \
@@ -44,7 +43,7 @@ pixi run --locked mojo run main.mojo
 Installed-package imports need no `-I src` or `CVC5_MOJO_LIBRARY` override.
 Pixi activates the environment used by the library loader. See the
 [release notes](../releases.md) for the first release's scope and
-[packaging](../architecture/packaging.md) for release preparation.
+[packaging](../architecture/packaging.md) for how the package is built.
 
 ## Work from a checkout
 

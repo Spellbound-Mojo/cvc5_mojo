@@ -1,6 +1,6 @@
 # Architecture overview
 
-cvc5 Mojo calls the native cvc5 solver through its C API. The Mojo classes
+CVC5 Mojo calls the native cvc5 solver through its C API. The Mojo classes
 follow cvc5's Python base API, so you can build terms, assert constraints,
 and inspect results using familiar solver operations.
 

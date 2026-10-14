@@ -46,7 +46,7 @@
 </nav>
 <div class="content">
   <main id="main" tabindex="-1">
-    {% if page %}<div class="eyebrow">{% if page.parent %}{{ page.parent.title }}{% else %}cvc5 Mojo documentation{% endif %}</div>{{ page.content }}{% else %}{% block content %}{% endblock %}{% endif %}
+    {% if page %}<div class="eyebrow">{% if page.parent %}{{ page.parent.title }}{% else %}CVC5 Mojo documentation{% endif %}</div>{{ page.content }}{% else %}{% block content %}{% endblock %}{% endif %}
     {% if page and (page.previous_page or page.next_page) %}
     <nav class="page-nav" aria-label="Previous and next pages">
       {% if page.previous_page %}<a href="{{ page.previous_page.url | url }}"><small>Previous</small>{{ page.previous_page.title }}</a>{% else %}<span></span>{% endif %}
